@@ -110,7 +110,7 @@ namespace FFT.Core.IO
             return 100 - (int)((current / max) * 100.0);
         }
 
-        public long Transfered()
+        public long Transferred()
         {
             return (long)this.fullLength - this.FileLength;
         }

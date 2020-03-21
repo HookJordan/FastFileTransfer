@@ -400,11 +400,10 @@ namespace FFT
             ProgressBar progressBar = lstTransfers.Controls.OfType<ProgressBar>().FirstOrDefault(i => (string)i.Tag == fileTransfer.TransferId);
 
             progressBar.Value = fileTransfer.CalculatePct();
-            item.SubItems[item.SubItems.Count - 2].Text = FileExplorer.GetSize(fileTransfer.Transfered());
+            item.SubItems[item.SubItems.Count - 2].Text = FileExplorer.GetSize(fileTransfer.Transferred());
 
             if (!fileTransfer.Transfering)
             {
-                // lstTransfers.Controls.Remove(progressBar);
                 item.SubItems[1].Text = "Completed";
             }
         }
@@ -537,8 +536,18 @@ namespace FFT
 
         private void cancelToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            // MSG ARE YOU SURE?
-            // DO CODE IN FILE EXPLORERE TO HANDLE THE PACKET TOO
+            var transfer = lstTransfers.SelectedItems[0];
+            if (transfer.SubItems[1].Text != "Completed")
+            {
+                string msg = "Are you sure you want to cancel the following file transfer?\n\n";
+                msg += "Local path:\n" + transfer.SubItems[2].Text;
+                msg += "\n\nRemote path:\n" + transfer.SubItems[3].Text;
+                if (MessageBox.Show(msg, "Cancel " + transfer.SubItems[0].Text, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                {
+                    // TODO: Send cancel request
+                    // Delete file in progress 
+                }
+            }
         }
 
         private void btnGo_Click(object sender, EventArgs e)
