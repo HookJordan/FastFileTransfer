@@ -76,11 +76,10 @@ namespace FFT
             this.client.PacketReceived += Client_PacketReceived;
             this.setDriveColumns(true);
 
+            // Setup listview icons
             lstIcons.Images.Add(IconReader.GetFileIcon("", IconReader.IconSize.Small, false));
             lstIcons.Images.Add(IconReader.GetFileIcon("dummy", IconReader.IconSize.Small, false));
             lstIcons.Images.Add(IconReader.GetFolderIcon(IconReader.IconSize.Small, IconReader.FolderType.Open));
-
-            this.client.Send(Packet.Create(PacketHeader.GetDrives, "NOW"));
         }
 
         private void Client_PacketReceived(Client client, byte[] payload)
@@ -94,6 +93,10 @@ namespace FFT
                     {
                         switch (p.PacketHeader)
                         {
+                            case PacketHeader.PingPong:
+                                // Load initial drive listing
+                                this.client.Send(Packet.Create(PacketHeader.GetDrives, "NOW"));
+                                break;
                             case PacketHeader.DrivesResponse:
                                 setDriveColumns();
                                 int rows = br.ReadInt32();

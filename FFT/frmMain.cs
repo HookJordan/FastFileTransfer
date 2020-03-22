@@ -1,4 +1,6 @@
-﻿using FFT.Core.IO;
+﻿using FFT.Core.Compression;
+using FFT.Core.Encryption;
+using FFT.Core.IO;
 using FFT.Core.Networking;
 using System;
 using System.Collections.Generic;
@@ -18,6 +20,7 @@ namespace FFT
         private Server server;
         private Client client;
         private Client incomingClient;
+        private CompressionProvider compressionProvider;
 
         public frmMain()
         {
@@ -37,6 +40,7 @@ namespace FFT
 
             // Load user config
             this.loadPreferences();
+            this.compressionProvider = new CompressionProvider(CompressionAlgorithm.GZIP);
 
             // Start waiting for incoming connections
             this.startServer();
@@ -69,12 +73,13 @@ namespace FFT
             if (this.incomingClient == null || !this.incomingClient.Connected)
             {
                 this.server.AcceptingConnections = false;
-                incomingClient = new Client(socket, this.txtIncomePass.Text);
+                incomingClient = new Client(socket, this.txtIncomePass.Text, compressionProvider, new CryptoProvider(CryptoAlgorithm.AES, server.Password));
                 incomingClient.PacketReceived += Client_PacketReceived;
                 incomingClient.Disconnected += IncomingClient_Disconnected;
 
                 Console.WriteLine($"NEW CONNECTION {incomingClient.IP}:{incomingClient.Port}");
 
+                // Send a quick packet to ensure the connection is successful
                 incomingClient.Send(Packet.Create(PacketHeader.PingPong, "TEST"));
 
                 Invoke((MethodInvoker)delegate
@@ -192,6 +197,16 @@ namespace FFT
             if (MessageBox.Show("This action will launch a new window you web browser. Are you sure you wish to continue?", "About", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
                 System.Diagnostics.Process.Start("https://jordanhook.com/index.php?&controller=home&view=projectsItem&projectId=8");
+            }
+        }
+
+        private void preferencesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (frmPreferences preferences = new frmPreferences())
+            {
+                preferences.ShowDialog();
+
+                // Save Configuration
             }
         }
     }

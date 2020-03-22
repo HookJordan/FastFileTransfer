@@ -56,8 +56,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Core\Compression\CompressionProvider.cs" />
+    <Compile Include="Core\Compression\GZip.cs" />
+    <Compile Include="Core\Encryption\AES.cs" />
+    <Compile Include="Core\Encryption\CryptoProvider.cs" />
     <Compile Include="Core\Encryption\SHA.cs" />
     <Compile Include="Core\Encryption\RC4.cs" />
+    <Compile Include="Core\Encryption\XOR.cs" />
     <Compile Include="Core\IO\Compression.cs" />
     <Compile Include="Core\IO\FileExplorer.cs" />
     <Compile Include="Core\IO\FileTransfer.cs" />
@@ -83,6 +88,12 @@
     <Compile Include="frmMain.Designer.cs">
       <DependentUpon>frmMain.cs</DependentUpon>
     </Compile>
+    <Compile Include="frmPreferences.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmPreferences.Designer.cs">
+      <DependentUpon>frmPreferences.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="frmFileBrowser.resx">
@@ -90,6 +101,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="frmMain.resx">
       <DependentUpon>frmMain.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmPreferences.resx">
+      <DependentUpon>frmPreferences.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using FFT.Core.Compression;
 
 namespace FFT.Core.IO
 {
@@ -21,6 +22,9 @@ namespace FFT.Core.IO
         public long FileLength { get; private set; }
         public TransferType TransferType { get; private set; }
         public bool Paused { get; private set; }
+
+        private CompressionProvider compressionProvider;
+
         public bool Transfering 
         { 
             get
@@ -33,8 +37,9 @@ namespace FFT.Core.IO
         private byte[] buffer = new byte[65535];
         private double fullLength = 0;
 
-        public FileTransfer(string local, string remote)
+        public FileTransfer(string local, string remote, CompressionProvider compressionProvider)
         {
+            this.compressionProvider = compressionProvider;
             this.LocalFilePath = local;
             this.RemoteFilePath = remote;
             this.TransferType = TransferType.Upload;
@@ -45,8 +50,9 @@ namespace FFT.Core.IO
             this.fullLength = fileStream.Length;
         }
 
-        public FileTransfer(string local, string remote, long length)
+        public FileTransfer(string local, string remote, long length, CompressionProvider compressionProvider)
         {
+            this.compressionProvider = compressionProvider;
             this.LocalFilePath = local;
             this.RemoteFilePath = remote;
             this.TransferType = TransferType.Download;
@@ -60,7 +66,7 @@ namespace FFT.Core.IO
         {
             if (chunk.Length == 0 || fileStream == null) return;
 
-            chunk = Compression.Decompress(chunk);
+            chunk = compressionProvider.Decompress(chunk); // Compression.Decompress(chunk);
 
             fileStream.Write(chunk, 0, chunk.Length);
             fileStream.Flush();
@@ -95,7 +101,7 @@ namespace FFT.Core.IO
             // long lenAfterCompress = compress.Length;
             // Console.WriteLine($"Before {lenBeforeCompress} - After {lenAfterCompress}");
 
-            return Compression.Compress(buffer);
+            return compressionProvider.Compress(buffer); // Compression.Compress(buffer);
         }
 
         public void Finish()

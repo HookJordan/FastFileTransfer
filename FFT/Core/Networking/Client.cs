@@ -1,4 +1,6 @@
-﻿using System;
+﻿using FFT.Core.Compression;
+using FFT.Core.Encryption;
+using System;
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
@@ -16,8 +18,13 @@ namespace FFT.Core.Networking
         private Socket socket;
         private string encodedPassword;
 
-        public Client(Socket socket, string password)
+        public CompressionProvider compressionProvider { get; private set; }
+        public CryptoProvider cryptoProvider { get; private set; }
+
+        public Client(Socket socket, string password, CompressionProvider compressionProvider, CryptoProvider cryptoProvider)
         {
+            this.compressionProvider = compressionProvider;
+            this.cryptoProvider = cryptoProvider;
             this.Password = password;
             this.encodedPassword = Encryption.SHA.Encode(password);
             this.socket = socket;
@@ -27,6 +34,15 @@ namespace FFT.Core.Networking
                 this.IP = ((IPEndPoint)socket.RemoteEndPoint).Address.ToString();
                 this.Port = ((IPEndPoint)socket.LocalEndPoint).Port;
 
+                // Send compression information
+                byte[] compressionMode = BitConverter.GetBytes((int)compressionProvider.algorithm);
+                socket.Send(compressionMode);
+
+                // Send crypto information
+                byte[] encryptionMode = BitConverter.GetBytes((int)cryptoProvider.algorithm);
+                socket.Send(encryptionMode);
+
+                // Begin receiving real data now
                 this.socket.BeginReceive(new byte[] { 0 }, 0, 0, 0, Receive, null);
             }
             catch (Exception e)
@@ -52,19 +68,44 @@ namespace FFT.Core.Networking
 
                 if (this.socket.Connected)
                 {
+                    // Confirm passwords using RC4
                     byte[] payload = Encoding.ASCII.GetBytes(this.encodedPassword);
                     Encryption.RC4.Perform(ref payload, password);
 
                     this.socket.Send(BitConverter.GetBytes(payload.Length));
                     this.socket.Send(payload);
 
-                    this.socket.BeginReceive(new byte[] { 0 }, 0, 0, 0, Receive, null);
+                    this.socket.BeginReceive(new byte[] { 0 }, 0, 0, 0, BeginReceiveConfigurations, null);
                 }
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
                 throw new Exception($"Unable to connect to {IP} on port {port}");
+            }
+        }
+
+        private void BeginReceiveConfigurations(IAsyncResult ir)
+        {
+            try
+            {
+                // Receive compression preferences 
+                byte[] compressionType = new byte[4];
+                this.socket.Receive(compressionType);
+                this.compressionProvider = new CompressionProvider((CompressionAlgorithm)BitConverter.ToInt32(compressionType, 0));
+
+                // Receive crypto preferences
+                byte[] encryptionMode = new byte[4];
+                this.socket.Receive(encryptionMode);
+                this.cryptoProvider = new CryptoProvider((CryptoAlgorithm)BitConverter.ToInt32(encryptionMode, 0), this.Password);
+
+                // Begin receiving real data now
+                this.socket.BeginReceive(new byte[] { 0 }, 0, 0, 0, Receive, null);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                this.Disconnected?.Invoke(this);
             }
         }
 
@@ -105,11 +146,11 @@ namespace FFT.Core.Networking
                     }
 
                     // Decrypt the packet
-                    Encryption.RC4.Perform(ref buffer, this.Password);
+                    // Encryption.RC4.Perform(ref buffer, this.Password);
+                    buffer = cryptoProvider.Decrypt(buffer);
 
                     // PASS THE PACKET TO A HANDLER?
                     this.PacketReceived?.Invoke(this, buffer);
-                    
 
                     buffer = null;
                 }
@@ -128,7 +169,8 @@ namespace FFT.Core.Networking
         {
             try
             {
-                Encryption.RC4.Perform(ref payload, this.Password);
+                // Encryption.RC4.Perform(ref payload, this.Password);
+                payload = cryptoProvider.Encrypt(payload);
 
                 this.socket.Send(BitConverter.GetBytes(payload.Length));
                 this.socket.Send(payload);
@@ -146,7 +188,14 @@ namespace FFT.Core.Networking
 
         public void Close()
         {
-            this.socket.Close();
+            if (this.socket.Connected)
+            {
+                this.socket.Close();
+            }
+            else
+            {
+                this.socket.Dispose();
+            }
         }
 
         // Events
