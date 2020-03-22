@@ -14,6 +14,7 @@ namespace FFT.Core.Networking
         DownloadFile,
         UploadFile,
         FileChunk,
+        CancelTransfer,
         DirectoryDelete,
         DirectoryCreate,
         DirectoryMove,

@@ -53,6 +53,20 @@ namespace FFT.Core.IO
             return ft;
         }
 
+        public FileTransfer CancelTransfer(string transferId)
+        {
+            if (FileTransfers.ContainsKey(transferId))
+            {
+                FileTransfer fileTransfer = FileTransfers[transferId];
+
+                fileTransfer.Cancel();
+
+                return fileTransfer;
+            }
+
+            throw new Exception($"Could not find file transfer with transfer id {transferId}");
+        }
+
         public void StartUpload(Client c, Packet p)
         {
             using (MemoryStream ms = new MemoryStream(p.Payload))

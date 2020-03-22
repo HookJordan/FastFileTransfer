@@ -51,6 +51,9 @@ namespace FFT.Core.IO
                     case PacketHeader.FileDelete:
                         DeleteFile(packet.ToString());
                         break;
+                    case PacketHeader.CancelTransfer:
+                        client.Send(Packet.Create(PacketHeader.CancelTransfer, tm.CancelTransfer(packet.ToString()).TransferId));
+                        break;
                     default:
                         break;
                 }

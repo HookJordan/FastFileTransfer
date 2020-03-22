@@ -29,7 +29,7 @@ namespace FFT.Core.IO
             } 
         }
 
-        private readonly FileStream fileStream;
+        private FileStream fileStream;
         private byte[] buffer = new byte[65535];
         private double fullLength = 0;
 
@@ -58,7 +58,7 @@ namespace FFT.Core.IO
 
         public void WriteChunk(byte[] chunk)
         {
-            if (chunk.Length == 0) return;
+            if (chunk.Length == 0 || fileStream == null) return;
 
             chunk = Compression.Decompress(chunk);
 
@@ -75,6 +75,8 @@ namespace FFT.Core.IO
 
         public byte[] GetChunk()
         {
+            if (fileStream == null) return new byte[] { };
+
             int read = fileStream.Read(buffer, 0, buffer.Length);
             
             if (read < buffer.Length)
@@ -100,6 +102,19 @@ namespace FFT.Core.IO
         {
             fileStream.Close();
             fileStream.Dispose();
+            fileStream = null;
+        }
+
+        public void Cancel()
+        {
+            // Close off file stream
+            Finish();
+
+            // Delete file that was in progress 
+            if (TransferType == TransferType.Download)
+            {
+                File.Delete(LocalFilePath);
+            }
         }
 
         public int CalculatePct()
@@ -118,16 +133,6 @@ namespace FFT.Core.IO
         public void TogglePause()
         {
             this.Paused = !this.Paused;
-        }
-
-        public void Cancel()
-        {
-            this.fileStream.Close();
-
-            if (this.TransferType == TransferType.Download)
-            {
-                File.Delete(LocalFilePath);
-            }
         }
     }
 }

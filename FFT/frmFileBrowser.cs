@@ -196,6 +196,9 @@ namespace FFT
                                 MessageBox.Show(p.ToString(), "An error occured", MessageBoxButtons.OK, MessageBoxIcon.Error);
                                 lstFiles.Enabled = true;
                                 break;
+                            case PacketHeader.CancelTransfer:
+                                CancelTransferItem(transfers.CancelTransfer(p.ToString()));
+                                break;
                             default:
                                 break;
                         }
@@ -289,6 +292,7 @@ namespace FFT
                 deleteToolStripMenuItem.Enabled = false;
                 deleteToolStripMenuItem1.Enabled = false;
                 downloadToolStripMenuItem.Enabled = false;
+                uploadToolStripMenuItem.Enabled = true;
             }
             else
             {
@@ -408,6 +412,17 @@ namespace FFT
             }
         }
 
+        private void CancelTransferItem(FileTransfer fileTransfer)
+        {
+            ListViewItem item = lstTransfers.Items.Cast<ListViewItem>().FirstOrDefault(i => (string)i.Tag == fileTransfer.TransferId);
+            ProgressBar progressBar = lstTransfers.Controls.OfType<ProgressBar>().FirstOrDefault(i => (string)i.Tag == fileTransfer.TransferId);
+
+            progressBar.Visible = false;
+
+            item.SubItems[item.SubItems.Count - 2].Text = "-";
+            item.SubItems[1].Text = "Cancelled";
+        }
+
         private void lstTransfers_ColumnWidthChanged(object sender, ColumnWidthChangedEventArgs e)
         {
             FixProgressBars();
@@ -505,6 +520,13 @@ namespace FFT
         private void mnuTransfers_Opening(object sender, CancelEventArgs e)
         {
             e.Cancel = lstTransfers.SelectedItems.Count == 0;
+
+            var selected = lstTransfers.SelectedItems[0];
+
+            // Button Logics for transfers
+            clearSelectedToolStripMenuItem.Enabled = selected.SubItems[1].Text == "Cancelled" || selected.SubItems[1].Text == "Completed";
+            pauseToolStripMenuItem.Enabled = selected.SubItems[1].Text != "Cancelled" && selected.SubItems[1].Text != "Completed";
+            cancelToolStripMenuItem.Enabled = selected.SubItems[1].Text != "Completed";
         }
 
         private void pauseToolStripMenuItem_Click(object sender, EventArgs e)
@@ -546,6 +568,7 @@ namespace FFT
                 {
                     // TODO: Send cancel request
                     // Delete file in progress 
+                    client.Send(Packet.Create(PacketHeader.CancelTransfer, (string)transfer.Tag));
                 }
             }
         }
@@ -558,6 +581,14 @@ namespace FFT
                 this.client.Send(Packet.Create(PacketHeader.GetDirectory, txtQuick.Text));
                 currentPath = txtQuick.Text;
             }
+        }
+
+        private void clearSelectedToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var item = lstTransfers.SelectedItems[0];
+            ProgressBar progressBar = lstTransfers.Controls.OfType<ProgressBar>().FirstOrDefault(i => (string)i.Tag == (string)item.Tag);
+            lstTransfers.Items.Remove(item);
+            lstTransfers.Controls.Remove(progressBar);
         }
     }
 }
