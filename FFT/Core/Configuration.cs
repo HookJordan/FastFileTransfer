@@ -8,6 +8,7 @@ namespace FFT.Core
     public class Configuration
     {
         public int Port;
+        public int BufferSize;
 
         public CompressionAlgorithm compressionAlgorithm;
         public CryptoAlgorithm cryptoAlgorithm;
@@ -16,6 +17,7 @@ namespace FFT.Core
         {
             // Defaults
             this.Port = 15056;
+            this.BufferSize = 256;
             this.compressionAlgorithm = CompressionAlgorithm.GZIP;
             this.cryptoAlgorithm = CryptoAlgorithm.RC4;
         }
@@ -27,6 +29,7 @@ namespace FFT.Core
                 using (BinaryWriter bw = new BinaryWriter(fs))
                 {
                     bw.Write(Port);
+                    bw.Write(BufferSize);
                     bw.Write((int)compressionAlgorithm);
                     bw.Write((int)cryptoAlgorithm);
                 }
@@ -49,6 +52,7 @@ namespace FFT.Core
                     using (BinaryReader br = new BinaryReader(fs))
                     {
                         config.Port = br.ReadInt32();
+                        config.BufferSize = br.ReadInt32();
                         config.compressionAlgorithm = (CompressionAlgorithm)br.ReadInt32();
                         config.cryptoAlgorithm = (CryptoAlgorithm)br.ReadInt32();
                     }

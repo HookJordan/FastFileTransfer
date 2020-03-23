@@ -20,14 +20,16 @@ namespace FFT.Core.Networking
 
         public CompressionProvider compressionProvider { get; private set; }
         public CryptoProvider cryptoProvider { get; private set; }
+        public int BufferSize { get; private set; }
 
-        public Client(Socket socket, string password, CompressionProvider compressionProvider, CryptoProvider cryptoProvider)
+        public Client(Socket socket, string password, CompressionProvider compressionProvider, CryptoProvider cryptoProvider, int bufferSize)
         {
             this.compressionProvider = compressionProvider;
             this.cryptoProvider = cryptoProvider;
             this.Password = password;
             this.encodedPassword = Encryption.SHA.Encode(password);
             this.socket = socket;
+            this.BufferSize = bufferSize;
 
             try
             {
@@ -53,12 +55,13 @@ namespace FFT.Core.Networking
 
         }
 
-        public Client(string ip, int port, string password)
+        public Client(string ip, int port, string password, int bufferSize)
         {
             this.Password = password;
             this.encodedPassword = Encryption.SHA.Encode(password);
             this.IP = ip;
             this.Port = port;
+            this.BufferSize = bufferSize;
 
             // Create new socket
             try
@@ -130,7 +133,7 @@ namespace FFT.Core.Networking
                     {
                         // Determine size of incoming payload
                         size = BitConverter.ToInt32(buffer, 0);
-                        buffer = new byte[65535];
+                        buffer = new byte[1024 * BufferSize];
 
                         // Well there is still data to receive
                         while (size > 0)

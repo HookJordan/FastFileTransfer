@@ -14,7 +14,7 @@ namespace FFT.Core.IO
 
         public FileTransfer LocalDownload(Client client, string localPath, string remotePath, long length)
         {
-            FileTransfer ft = new FileTransfer(localPath, remotePath, length, client.compressionProvider);
+            FileTransfer ft = new FileTransfer(localPath, remotePath, length, client.compressionProvider, client.BufferSize);
             FileTransfers.Add(ft.TransferId, ft);
 
             using (MemoryStream ms = new MemoryStream())
@@ -34,7 +34,7 @@ namespace FFT.Core.IO
 
         public FileTransfer LocalUpload(Client c, string localPath, string remotePath)
         {
-            FileTransfer ft = new FileTransfer(localPath, remotePath, c.compressionProvider);
+            FileTransfer ft = new FileTransfer(localPath, remotePath, c.compressionProvider, c.BufferSize);
             FileTransfers.Add(ft.TransferId, ft);
 
             using (MemoryStream ms = new MemoryStream())
@@ -76,7 +76,7 @@ namespace FFT.Core.IO
                     string localPath = br.ReadString();
                     string remotePath = br.ReadString();
 
-                    FileTransfer t = new FileTransfer(localPath, remotePath, c.compressionProvider);
+                    FileTransfer t = new FileTransfer(localPath, remotePath, c.compressionProvider, c.BufferSize);
                     t.TransferId = br.ReadString();
                     FileTransfers.Add(t.TransferId, t);
 
@@ -96,7 +96,7 @@ namespace FFT.Core.IO
                     string remotePath = br.ReadString();
                     long len = long.Parse(br.ReadString());
 
-                    FileTransfer t = new FileTransfer(localPath, remotePath, len, c.compressionProvider);
+                    FileTransfer t = new FileTransfer(localPath, remotePath, len, c.compressionProvider, c.BufferSize);
                     t.TransferId = br.ReadString();
                     FileTransfers.Add(t.TransferId, t);
 

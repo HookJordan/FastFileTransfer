@@ -38,10 +38,10 @@ namespace FFT.Core.IO
         }
 
         private FileStream fileStream;
-        private byte[] buffer = new byte[1024 * 256]; // TODO: Make this configurable
+        private byte[] buffer; // = new byte[1024 * 256]; // TODO: Make this configurable
         private double fullLength = 0;
 
-        public FileTransfer(string local, string remote, CompressionProvider compressionProvider)
+        public FileTransfer(string local, string remote, CompressionProvider compressionProvider, int bufferSize)
         {
             this.compressionProvider = compressionProvider;
             this.LocalFilePath = local;
@@ -52,9 +52,12 @@ namespace FFT.Core.IO
             fileStream = new FileStream(this.LocalFilePath, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None);
             FileLength = fileStream.Length;
             this.fullLength = fileStream.Length;
+
+            // Load Buffer Size
+            this.buffer = new byte[1024 * bufferSize];
         }
 
-        public FileTransfer(string local, string remote, long length, CompressionProvider compressionProvider)
+        public FileTransfer(string local, string remote, long length, CompressionProvider compressionProvider, int bufferSize)
         {
             this.compressionProvider = compressionProvider;
             this.LocalFilePath = local;
@@ -64,6 +67,9 @@ namespace FFT.Core.IO
             this.FileLength = length;
             this.fullLength = length;
             fileStream = new FileStream(this.LocalFilePath, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None);
+
+            // Load Buffer Size
+            this.buffer = new byte[1024 * bufferSize];
         }
 
         public void WriteChunk(byte[] chunk)

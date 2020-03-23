@@ -27,11 +27,9 @@ namespace FFT
         {
             this.Text = "Preferences";
 
-            // Remove ugly buttons
-            this.numPort.Controls[0].Visible = false;
-
             // Load Port
             this.numPort.Value = configuration.Port;
+            this.numBufferSize.Value = configuration.BufferSize;
 
             // Load compression mode
             switch (configuration.compressionAlgorithm)
@@ -77,6 +75,7 @@ namespace FFT
         {
             // Set port
             configuration.Port = (int)numPort.Value;
+            configuration.BufferSize = (int)numBufferSize.Value;
 
             // Set compression mode
             if (cbDisableCompression.Checked)

@@ -73,7 +73,7 @@ namespace FFT
             if (this.incomingClient == null || !this.incomingClient.Connected)
             {
                 this.server.AcceptingConnections = false;
-                incomingClient = new Client(socket, this.txtIncomePass.Text, new CompressionProvider(configuration.compressionAlgorithm), new CryptoProvider(configuration.cryptoAlgorithm, server.Password));
+                incomingClient = new Client(socket, this.txtIncomePass.Text, new CompressionProvider(configuration.compressionAlgorithm), new CryptoProvider(configuration.cryptoAlgorithm, server.Password), configuration.BufferSize);
                 incomingClient.PacketReceived += Client_PacketReceived;
                 incomingClient.Disconnected += IncomingClient_Disconnected;
 
@@ -181,7 +181,7 @@ namespace FFT
             try
             {
                 this.btnConnect.Enabled = false;
-                this.client = new Client(this.txtIp.Text, (int)this.numPort.Value, this.txtPassword.Text);
+                this.client = new Client(this.txtIp.Text, (int)this.numPort.Value, this.txtPassword.Text, configuration.BufferSize);
 
                 if (this.client.Connected)
                 {
