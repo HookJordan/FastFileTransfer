@@ -43,6 +43,9 @@ namespace FFT
                 case CompressionAlgorithm.LZMA:
                     cbLZMA.Checked = true;
                     break;
+                case CompressionAlgorithm.LZO:
+                    cbLZO.Checked = true;
+                    break;
             }
 
              // Load encryption mode
@@ -89,6 +92,10 @@ namespace FFT
             else if (cbLZMA.Checked)
             {
                 configuration.compressionAlgorithm = CompressionAlgorithm.LZMA;
+            }
+            else if (cbLZO.Checked)
+            {
+                configuration.compressionAlgorithm = CompressionAlgorithm.LZO;
             }
 
             // Set encryption mode

@@ -36,29 +36,30 @@
             this.cbGZIP = new System.Windows.Forms.RadioButton();
             this.cbDisableCompression = new System.Windows.Forms.RadioButton();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.cbBlowFish = new System.Windows.Forms.RadioButton();
             this.cbDisabledCrypto = new System.Windows.Forms.RadioButton();
             this.cbAES = new System.Windows.Forms.RadioButton();
             this.cbRC4 = new System.Windows.Forms.RadioButton();
             this.cbXOR = new System.Windows.Forms.RadioButton();
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnConfirm = new System.Windows.Forms.Button();
-            this.cbBlowFish = new System.Windows.Forms.RadioButton();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.tabPage2 = new System.Windows.Forms.TabPage();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.label3 = new System.Windows.Forms.Label();
             this.numBufferSize = new System.Windows.Forms.NumericUpDown();
             this.label1 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
+            this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.cbLZO = new System.Windows.Forms.RadioButton();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numPort)).BeginInit();
             this.groupBox5.SuspendLayout();
             this.groupBox4.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
-            this.tabPage2.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numBufferSize)).BeginInit();
+            this.tabPage2.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -106,8 +107,9 @@
             // groupBox5
             // 
             this.groupBox5.Controls.Add(this.cbLZMA);
-            this.groupBox5.Controls.Add(this.cbGZIP);
             this.groupBox5.Controls.Add(this.cbDisableCompression);
+            this.groupBox5.Controls.Add(this.cbGZIP);
+            this.groupBox5.Controls.Add(this.cbLZO);
             this.groupBox5.Location = new System.Drawing.Point(54, 207);
             this.groupBox5.Name = "groupBox5";
             this.groupBox5.Size = new System.Drawing.Size(289, 56);
@@ -118,8 +120,7 @@
             // cbLZMA
             // 
             this.cbLZMA.AutoSize = true;
-            this.cbLZMA.Enabled = false;
-            this.cbLZMA.Location = new System.Drawing.Point(143, 22);
+            this.cbLZMA.Location = new System.Drawing.Point(198, 22);
             this.cbLZMA.Name = "cbLZMA";
             this.cbLZMA.Size = new System.Drawing.Size(57, 20);
             this.cbLZMA.TabIndex = 0;
@@ -130,7 +131,7 @@
             // 
             this.cbGZIP.AutoSize = true;
             this.cbGZIP.Checked = true;
-            this.cbGZIP.Location = new System.Drawing.Point(86, 22);
+            this.cbGZIP.Location = new System.Drawing.Point(140, 22);
             this.cbGZIP.Name = "cbGZIP";
             this.cbGZIP.Size = new System.Drawing.Size(52, 20);
             this.cbGZIP.TabIndex = 1;
@@ -162,6 +163,16 @@
             this.groupBox4.TabIndex = 0;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Encryption Algorithm";
+            // 
+            // cbBlowFish
+            // 
+            this.cbBlowFish.AutoSize = true;
+            this.cbBlowFish.Location = new System.Drawing.Point(6, 100);
+            this.cbBlowFish.Name = "cbBlowFish";
+            this.cbBlowFish.Size = new System.Drawing.Size(144, 20);
+            this.cbBlowFish.TabIndex = 4;
+            this.cbBlowFish.Text = "Blowfish (ECB Mode)";
+            this.cbBlowFish.UseVisualStyleBackColor = true;
             // 
             // cbDisabledCrypto
             // 
@@ -227,16 +238,6 @@
             this.btnConfirm.UseVisualStyleBackColor = true;
             this.btnConfirm.Click += new System.EventHandler(this.btnConfirm_Click);
             // 
-            // cbBlowFish
-            // 
-            this.cbBlowFish.AutoSize = true;
-            this.cbBlowFish.Location = new System.Drawing.Point(6, 100);
-            this.cbBlowFish.Name = "cbBlowFish";
-            this.cbBlowFish.Size = new System.Drawing.Size(144, 20);
-            this.cbBlowFish.TabIndex = 4;
-            this.cbBlowFish.Text = "Blowfish (ECB Mode)";
-            this.cbBlowFish.UseVisualStyleBackColor = true;
-            // 
             // tabControl1
             // 
             this.tabControl1.Controls.Add(this.tabPage1);
@@ -260,18 +261,6 @@
             this.tabPage1.Text = "Network Configuration";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
-            // tabPage2
-            // 
-            this.tabPage2.Controls.Add(this.groupBox5);
-            this.tabPage2.Controls.Add(this.groupBox4);
-            this.tabPage2.Location = new System.Drawing.Point(4, 25);
-            this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(418, 332);
-            this.tabPage2.TabIndex = 1;
-            this.tabPage2.Text = "Data Configuration";
-            this.tabPage2.UseVisualStyleBackColor = true;
-            // 
             // groupBox2
             // 
             this.groupBox2.Controls.Add(this.label3);
@@ -283,6 +272,15 @@
             this.groupBox2.TabIndex = 14;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Limits";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(282, 43);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(22, 16);
+            this.label3.TabIndex = 14;
+            this.label3.Text = "KB";
             // 
             // numBufferSize
             // 
@@ -315,14 +313,27 @@
             this.label1.TabIndex = 12;
             this.label1.Text = "Buffer Size:";
             // 
-            // label3
+            // tabPage2
             // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(282, 43);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(22, 16);
-            this.label3.TabIndex = 14;
-            this.label3.Text = "KB";
+            this.tabPage2.Controls.Add(this.groupBox5);
+            this.tabPage2.Controls.Add(this.groupBox4);
+            this.tabPage2.Location = new System.Drawing.Point(4, 25);
+            this.tabPage2.Name = "tabPage2";
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage2.Size = new System.Drawing.Size(418, 332);
+            this.tabPage2.TabIndex = 1;
+            this.tabPage2.Text = "Data Configuration";
+            this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // cbLZO
+            // 
+            this.cbLZO.AutoSize = true;
+            this.cbLZO.Location = new System.Drawing.Point(86, 22);
+            this.cbLZO.Name = "cbLZO";
+            this.cbLZO.Size = new System.Drawing.Size(48, 20);
+            this.cbLZO.TabIndex = 3;
+            this.cbLZO.Text = "LZO";
+            this.cbLZO.UseVisualStyleBackColor = true;
             // 
             // frmPreferences
             // 
@@ -350,10 +361,10 @@
             this.groupBox4.PerformLayout();
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
-            this.tabPage2.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numBufferSize)).EndInit();
+            this.tabPage2.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -382,5 +393,6 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.NumericUpDown numBufferSize;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.RadioButton cbLZO;
     }
 }

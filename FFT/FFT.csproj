@@ -22,6 +22,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -56,8 +57,26 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Core\Compression\7zip\Common\CommandLineParser.cs" />
+    <Compile Include="Core\Compression\7zip\Common\CRC.cs" />
+    <Compile Include="Core\Compression\7zip\Common\InBuffer.cs" />
+    <Compile Include="Core\Compression\7zip\Common\OutBuffer.cs" />
+    <Compile Include="Core\Compression\7zip\Compress\LZMA\LzmaBase.cs" />
+    <Compile Include="Core\Compression\7zip\Compress\LZMA\LzmaDecoder.cs" />
+    <Compile Include="Core\Compression\7zip\Compress\LZMA\LzmaEncoder.cs" />
+    <Compile Include="Core\Compression\7zip\Compress\LZ\IMatchFinder.cs" />
+    <Compile Include="Core\Compression\7zip\Compress\LZ\LzBinTree.cs" />
+    <Compile Include="Core\Compression\7zip\Compress\LZ\LzInWindow.cs" />
+    <Compile Include="Core\Compression\7zip\Compress\LZ\LzOutWindow.cs" />
+    <Compile Include="Core\Compression\7zip\Compress\RangeCoder\RangeCoder.cs" />
+    <Compile Include="Core\Compression\7zip\Compress\RangeCoder\RangeCoderBit.cs" />
+    <Compile Include="Core\Compression\7zip\Compress\RangeCoder\RangeCoderBitTree.cs" />
+    <Compile Include="Core\Compression\7zip\Helper.cs" />
+    <Compile Include="Core\Compression\7zip\ICoder.cs" />
     <Compile Include="Core\Compression\CompressionProvider.cs" />
     <Compile Include="Core\Compression\GZip.cs" />
+    <Compile Include="Core\Compression\LzmaWrapper.cs" />
+    <Compile Include="Core\Compression\LZO\LZO.cs" />
     <Compile Include="Core\Configuration.cs" />
     <Compile Include="Core\Encryption\AES.cs" />
     <Compile Include="Core\Encryption\Blowfish.cs" />

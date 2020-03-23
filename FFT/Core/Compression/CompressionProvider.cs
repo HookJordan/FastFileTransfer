@@ -10,7 +10,8 @@ namespace FFT.Core.Compression
     {
         Disabled = 0,
         GZIP,
-        LZMA
+        LZMA,
+        LZO
     }
     public class CompressionProvider
     {
@@ -27,6 +28,10 @@ namespace FFT.Core.Compression
             {
                 case CompressionAlgorithm.GZIP:
                     return GZip.Compress(input);
+                case CompressionAlgorithm.LZO:
+                    return LZO.LZO.Compress(input);
+                case CompressionAlgorithm.LZMA:
+                    return LzmaWrapper.Compress(input);
                 default:
                     return input;
             }
@@ -39,6 +44,10 @@ namespace FFT.Core.Compression
             {
                 case CompressionAlgorithm.GZIP:
                     return GZip.Decompress(input);
+                case CompressionAlgorithm.LZO:
+                    return LZO.LZO.Decompress(input);
+                case CompressionAlgorithm.LZMA:
+                    return LzmaWrapper.Decompress(input);
                 default:
                     return input;
             }
