@@ -11,17 +11,27 @@ namespace FFT.Core.Encryption
         Disabled = 0,
         XOR,
         RC4,
-        AES
+        AES,
+        Blowfish
     }
     public class CryptoProvider
     {
         public CryptoAlgorithm algorithm { get; private set; }
         private byte[] key;
+        private BlowFish blowFish;
 
         public CryptoProvider(CryptoAlgorithm cryptoAlgorithm, string key)
         {
             this.algorithm = cryptoAlgorithm;
             this.key = Encoding.ASCII.GetBytes(SHA.Encode(key));
+
+            if (cryptoAlgorithm == CryptoAlgorithm.Blowfish)
+            {
+                // Resize key for blowfish
+                Array.Resize(ref this.key, 56);
+                this.blowFish = new BlowFish(this.key);
+                this.blowFish.SetRandomIV();
+            }
         }
 
         public byte[] Encrypt(byte[] input)
@@ -36,6 +46,9 @@ namespace FFT.Core.Encryption
                     break;
                 case CryptoAlgorithm.AES:
                     input = AES.Encrypt(input, key);
+                    break;
+                case CryptoAlgorithm.Blowfish:
+                    input = blowFish.Encrypt_ECB(input);
                     break;
                 default: // Invalid algorithm or non selected
                     break;
@@ -56,6 +69,9 @@ namespace FFT.Core.Encryption
                     break;
                 case CryptoAlgorithm.AES:
                     input = AES.Decrypt(input, key);
+                    break;
+                case CryptoAlgorithm.Blowfish:
+                    input = blowFish.Decrypt_ECB(input);
                     break;
                 default: // Invalid algorithm or non selected
                     break;

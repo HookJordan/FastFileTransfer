@@ -41,6 +41,24 @@ namespace FFT
 
         private void FrmFileBrowser_FormClosing(object sender, FormClosingEventArgs e)
         {
+            ListViewItem activeTransfer = lstTransfers.Items.Cast<ListViewItem>().FirstOrDefault(i => i.SubItems[1].Text != "Completed" && i.SubItems[1].Text != "Cancelled");
+            if (activeTransfer != null)
+            {
+                if (MessageBox.Show("Are you sure you want to close this session? All active transfers will be cancelled.", "Close Session", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.No)
+                {
+                    e.Cancel = true;
+                    return;
+                }
+                else
+                {
+                    // Stop handling packets
+                    this.client.PacketReceived -= Client_PacketReceived;
+
+                    // Close all file streams
+                    transfers.CancelAllActiveTransfers();
+                }
+            }
+
             this.client.Send(Packet.Create(PacketHeader.GoodBye, ""));
         }
 
@@ -75,7 +93,11 @@ namespace FFT
         private void frmFileBrowser_Load(object sender, EventArgs e)
         {
             this.Text = $"File Browser - {client.IP}";
+
+            // Begin Handling incoming packets
             this.client.PacketReceived += Client_PacketReceived;
+
+            // Set Listview to drives view
             this.setDriveColumns(true);
 
             // Setup listview icons
@@ -441,6 +463,7 @@ namespace FFT
             if (!fileTransfer.Transfering)
             {
                 item.SubItems[1].Text = "Completed";
+                item.ForeColor = Color.Green;
             }
         }
 
@@ -454,6 +477,7 @@ namespace FFT
             item.SubItems[item.SubItems.Count - 3].Text = "-";
             item.SubItems[item.SubItems.Count - 2].Text = "-";
             item.SubItems[1].Text = "Cancelled";
+            item.ForeColor = Color.Red;
         }
 
         private void lstTransfers_ColumnWidthChanged(object sender, ColumnWidthChangedEventArgs e)
@@ -554,12 +578,15 @@ namespace FFT
         {
             e.Cancel = lstTransfers.SelectedItems.Count == 0;
 
-            var selected = lstTransfers.SelectedItems[0];
+            if (lstTransfers.SelectedItems.Count > 0)
+            {
+                var selected = lstTransfers.SelectedItems[0];
 
-            // Button Logics for transfers
-            clearSelectedToolStripMenuItem.Enabled = selected.SubItems[1].Text == "Cancelled" || selected.SubItems[1].Text == "Completed";
-            pauseToolStripMenuItem.Enabled = selected.SubItems[1].Text != "Cancelled" && selected.SubItems[1].Text != "Completed";
-            cancelToolStripMenuItem.Enabled = selected.SubItems[1].Text != "Completed";
+                // Button Logics for transfers
+                clearSelectedToolStripMenuItem.Enabled = selected.SubItems[1].Text == "Cancelled" || selected.SubItems[1].Text == "Completed";
+                pauseToolStripMenuItem.Enabled = selected.SubItems[1].Text != "Cancelled" && selected.SubItems[1].Text != "Completed";
+                cancelToolStripMenuItem.Enabled = selected.SubItems[1].Text != "Completed";
+            }
         }
 
         private void pauseToolStripMenuItem_Click(object sender, EventArgs e)

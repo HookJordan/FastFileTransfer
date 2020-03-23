@@ -54,6 +54,9 @@ namespace FFT.Core.IO
                     case PacketHeader.CancelTransfer:
                         client.Send(Packet.Create(PacketHeader.CancelTransfer, tm.CancelTransfer(packet.ToString()).TransferId));
                         break;
+                    case PacketHeader.GoodBye:
+                        tm.CancelAllActiveTransfers();
+                        break;
                     default:
                         break;
                 }
@@ -70,7 +73,6 @@ namespace FFT.Core.IO
                 SendException(client, e);
             }
         }
-
         private static void MoveFile(Packet p)
         {
             using (MemoryStream ms = new MemoryStream(p.Payload))

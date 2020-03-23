@@ -43,6 +43,7 @@
             this.cbXOR = new System.Windows.Forms.RadioButton();
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnConfirm = new System.Windows.Forms.Button();
+            this.cbBlowFish = new System.Windows.Forms.RadioButton();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numPort)).BeginInit();
             this.groupBox3.SuspendLayout();
@@ -93,7 +94,7 @@
             this.groupBox3.Controls.Add(this.groupBox4);
             this.groupBox3.Location = new System.Drawing.Point(12, 93);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(310, 150);
+            this.groupBox3.Size = new System.Drawing.Size(310, 249);
             this.groupBox3.TabIndex = 2;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Transfer Configuration";
@@ -103,7 +104,7 @@
             this.groupBox5.Controls.Add(this.cbLZMA);
             this.groupBox5.Controls.Add(this.cbGZIP);
             this.groupBox5.Controls.Add(this.cbDisableCompression);
-            this.groupBox5.Location = new System.Drawing.Point(10, 84);
+            this.groupBox5.Location = new System.Drawing.Point(10, 182);
             this.groupBox5.Name = "groupBox5";
             this.groupBox5.Size = new System.Drawing.Size(289, 56);
             this.groupBox5.TabIndex = 3;
@@ -146,13 +147,14 @@
             // 
             // groupBox4
             // 
+            this.groupBox4.Controls.Add(this.cbBlowFish);
             this.groupBox4.Controls.Add(this.cbDisabledCrypto);
             this.groupBox4.Controls.Add(this.cbAES);
             this.groupBox4.Controls.Add(this.cbRC4);
             this.groupBox4.Controls.Add(this.cbXOR);
             this.groupBox4.Location = new System.Drawing.Point(10, 22);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(289, 56);
+            this.groupBox4.Size = new System.Drawing.Size(289, 154);
             this.groupBox4.TabIndex = 0;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Encryption Algorithm";
@@ -171,18 +173,18 @@
             // cbAES
             // 
             this.cbAES.AutoSize = true;
-            this.cbAES.Location = new System.Drawing.Point(198, 22);
+            this.cbAES.Location = new System.Drawing.Point(6, 126);
             this.cbAES.Name = "cbAES";
-            this.cbAES.Size = new System.Drawing.Size(49, 20);
+            this.cbAES.Size = new System.Drawing.Size(146, 20);
             this.cbAES.TabIndex = 2;
-            this.cbAES.Text = "AES";
+            this.cbAES.Text = "AES 256 (CBC Mode)";
             this.cbAES.UseVisualStyleBackColor = true;
             // 
             // cbRC4
             // 
             this.cbRC4.AutoSize = true;
             this.cbRC4.Checked = true;
-            this.cbRC4.Location = new System.Drawing.Point(143, 22);
+            this.cbRC4.Location = new System.Drawing.Point(6, 74);
             this.cbRC4.Name = "cbRC4";
             this.cbRC4.Size = new System.Drawing.Size(49, 20);
             this.cbRC4.TabIndex = 0;
@@ -193,7 +195,7 @@
             // cbXOR
             // 
             this.cbXOR.AutoSize = true;
-            this.cbXOR.Location = new System.Drawing.Point(86, 22);
+            this.cbXOR.Location = new System.Drawing.Point(6, 48);
             this.cbXOR.Name = "cbXOR";
             this.cbXOR.Size = new System.Drawing.Size(51, 20);
             this.cbXOR.TabIndex = 1;
@@ -203,7 +205,7 @@
             // 
             // btnCancel
             // 
-            this.btnCancel.Location = new System.Drawing.Point(236, 249);
+            this.btnCancel.Location = new System.Drawing.Point(236, 348);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
             this.btnCancel.TabIndex = 3;
@@ -213,7 +215,7 @@
             // 
             // btnConfirm
             // 
-            this.btnConfirm.Location = new System.Drawing.Point(155, 249);
+            this.btnConfirm.Location = new System.Drawing.Point(155, 348);
             this.btnConfirm.Name = "btnConfirm";
             this.btnConfirm.Size = new System.Drawing.Size(75, 23);
             this.btnConfirm.TabIndex = 4;
@@ -221,11 +223,21 @@
             this.btnConfirm.UseVisualStyleBackColor = true;
             this.btnConfirm.Click += new System.EventHandler(this.btnConfirm_Click);
             // 
+            // cbBlowFish
+            // 
+            this.cbBlowFish.AutoSize = true;
+            this.cbBlowFish.Location = new System.Drawing.Point(6, 100);
+            this.cbBlowFish.Name = "cbBlowFish";
+            this.cbBlowFish.Size = new System.Drawing.Size(144, 20);
+            this.cbBlowFish.TabIndex = 4;
+            this.cbBlowFish.Text = "Blowfish (ECB Mode)";
+            this.cbBlowFish.UseVisualStyleBackColor = true;
+            // 
             // frmPreferences
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(334, 284);
+            this.ClientSize = new System.Drawing.Size(333, 381);
             this.Controls.Add(this.btnConfirm);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.groupBox3);
@@ -268,5 +280,6 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.Button btnConfirm;
+        private System.Windows.Forms.RadioButton cbBlowFish;
     }
 }

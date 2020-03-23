@@ -60,6 +60,7 @@
     <Compile Include="Core\Compression\GZip.cs" />
     <Compile Include="Core\Configuration.cs" />
     <Compile Include="Core\Encryption\AES.cs" />
+    <Compile Include="Core\Encryption\Blowfish.cs" />
     <Compile Include="Core\Encryption\CryptoProvider.cs" />
     <Compile Include="Core\Encryption\SHA.cs" />
     <Compile Include="Core\Encryption\RC4.cs" />

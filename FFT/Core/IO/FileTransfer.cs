@@ -38,7 +38,7 @@ namespace FFT.Core.IO
         }
 
         private FileStream fileStream;
-        private byte[] buffer = new byte[65535];
+        private byte[] buffer = new byte[1024 * 256]; // TODO: Make this configurable
         private double fullLength = 0;
 
         public FileTransfer(string local, string remote, CompressionProvider compressionProvider)
@@ -70,7 +70,7 @@ namespace FFT.Core.IO
         {
             if (chunk.Length == 0 || fileStream == null) return;
 
-            chunk = compressionProvider.Decompress(chunk); // Compression.Decompress(chunk);
+            chunk = compressionProvider.Decompress(chunk);
 
             fileStream.Write(chunk, 0, chunk.Length);
             fileStream.Flush();
@@ -104,12 +104,7 @@ namespace FFT.Core.IO
 
             UpdateSpeed(read);
 
-            // long lenBeforeCompress = buffer.Length;
-            // byte[] compress = Compression.Compress(buffer);
-            // long lenAfterCompress = compress.Length;
-            // Console.WriteLine($"Before {lenBeforeCompress} - After {lenAfterCompress}");
-
-            return compressionProvider.Compress(buffer); // Compression.Compress(buffer);
+            return compressionProvider.Compress(buffer);
         }
 
         private void UpdateSpeed(int amount)
@@ -130,9 +125,12 @@ namespace FFT.Core.IO
 
         public void Finish()
         {
-            fileStream.Close();
-            fileStream.Dispose();
-            fileStream = null;
+            if (fileStream != null)
+            {
+                fileStream.Close();
+                fileStream.Dispose();
+                fileStream = null;
+            }
         }
 
         public void Cancel()

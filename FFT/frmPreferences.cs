@@ -62,6 +62,9 @@ namespace FFT
                 case CryptoAlgorithm.AES:
                     cbAES.Checked = true;
                     break;
+                case CryptoAlgorithm.Blowfish:
+                    cbBlowFish.Checked = true;
+                    break;
             }
         }
 
@@ -105,6 +108,9 @@ namespace FFT
             else if (cbAES.Checked)
             {
                 configuration.cryptoAlgorithm = CryptoAlgorithm.AES;
+            } else if (cbBlowFish.Checked)
+            {
+                configuration.cryptoAlgorithm = CryptoAlgorithm.Blowfish;
             }
 
 

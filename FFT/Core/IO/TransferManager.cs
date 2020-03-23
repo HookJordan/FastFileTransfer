@@ -159,5 +159,13 @@ namespace FFT.Core.IO
                 }
             }
         }
+
+        public void CancelAllActiveTransfers()
+        {
+            foreach (var transfer in FileTransfers.Values)
+            {
+                transfer.Cancel();
+            }
+        }
     }
 }
