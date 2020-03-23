@@ -20,7 +20,8 @@ namespace FFT.Core.Networking
         DirectoryMove,
         FileDelete,
         FileMove,
-        FileBrowserException
+        FileBrowserException,
+        GoodBye
     }
     public class Packet
     {

@@ -29,25 +29,25 @@
         private void InitializeComponent()
         {
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.groupBox4 = new System.Windows.Forms.GroupBox();
-            this.radioButton1 = new System.Windows.Forms.RadioButton();
-            this.radioButton2 = new System.Windows.Forms.RadioButton();
-            this.radioButton3 = new System.Windows.Forms.RadioButton();
-            this.groupBox5 = new System.Windows.Forms.GroupBox();
-            this.radioButton4 = new System.Windows.Forms.RadioButton();
-            this.radioButton5 = new System.Windows.Forms.RadioButton();
-            this.radioButton6 = new System.Windows.Forms.RadioButton();
-            this.radioButton7 = new System.Windows.Forms.RadioButton();
             this.numPort = new System.Windows.Forms.NumericUpDown();
             this.label2 = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.cbLZMA = new System.Windows.Forms.RadioButton();
+            this.cbGZIP = new System.Windows.Forms.RadioButton();
+            this.cbDisableCompression = new System.Windows.Forms.RadioButton();
+            this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.cbDisabledCrypto = new System.Windows.Forms.RadioButton();
+            this.cbAES = new System.Windows.Forms.RadioButton();
+            this.cbRC4 = new System.Windows.Forms.RadioButton();
+            this.cbXOR = new System.Windows.Forms.RadioButton();
+            this.btnCancel = new System.Windows.Forms.Button();
+            this.btnConfirm = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
-            this.groupBox3.SuspendLayout();
-            this.groupBox4.SuspendLayout();
-            this.groupBox5.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numPort)).BeginInit();
+            this.groupBox3.SuspendLayout();
+            this.groupBox5.SuspendLayout();
+            this.groupBox4.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -60,119 +60,6 @@
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Network Configration";
-            // 
-            // groupBox3
-            // 
-            this.groupBox3.Controls.Add(this.groupBox5);
-            this.groupBox3.Controls.Add(this.groupBox4);
-            this.groupBox3.Location = new System.Drawing.Point(12, 93);
-            this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(310, 150);
-            this.groupBox3.TabIndex = 2;
-            this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "Transfer Configuration";
-            // 
-            // groupBox4
-            // 
-            this.groupBox4.Controls.Add(this.radioButton7);
-            this.groupBox4.Controls.Add(this.radioButton3);
-            this.groupBox4.Controls.Add(this.radioButton1);
-            this.groupBox4.Controls.Add(this.radioButton2);
-            this.groupBox4.Location = new System.Drawing.Point(10, 22);
-            this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(289, 56);
-            this.groupBox4.TabIndex = 0;
-            this.groupBox4.TabStop = false;
-            this.groupBox4.Text = "Encryption Algorithm";
-            // 
-            // radioButton1
-            // 
-            this.radioButton1.AutoSize = true;
-            this.radioButton1.Checked = true;
-            this.radioButton1.Location = new System.Drawing.Point(143, 22);
-            this.radioButton1.Name = "radioButton1";
-            this.radioButton1.Size = new System.Drawing.Size(49, 20);
-            this.radioButton1.TabIndex = 0;
-            this.radioButton1.TabStop = true;
-            this.radioButton1.Text = "RC4";
-            this.radioButton1.UseVisualStyleBackColor = true;
-            // 
-            // radioButton2
-            // 
-            this.radioButton2.AutoSize = true;
-            this.radioButton2.Location = new System.Drawing.Point(86, 22);
-            this.radioButton2.Name = "radioButton2";
-            this.radioButton2.Size = new System.Drawing.Size(51, 20);
-            this.radioButton2.TabIndex = 1;
-            this.radioButton2.TabStop = true;
-            this.radioButton2.Text = "XOR";
-            this.radioButton2.UseVisualStyleBackColor = true;
-            // 
-            // radioButton3
-            // 
-            this.radioButton3.AutoSize = true;
-            this.radioButton3.Location = new System.Drawing.Point(198, 22);
-            this.radioButton3.Name = "radioButton3";
-            this.radioButton3.Size = new System.Drawing.Size(49, 20);
-            this.radioButton3.TabIndex = 2;
-            this.radioButton3.Text = "AES";
-            this.radioButton3.UseVisualStyleBackColor = true;
-            // 
-            // groupBox5
-            // 
-            this.groupBox5.Controls.Add(this.radioButton5);
-            this.groupBox5.Controls.Add(this.radioButton6);
-            this.groupBox5.Controls.Add(this.radioButton4);
-            this.groupBox5.Location = new System.Drawing.Point(10, 84);
-            this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(289, 56);
-            this.groupBox5.TabIndex = 3;
-            this.groupBox5.TabStop = false;
-            this.groupBox5.Text = "Compression Algorithm";
-            // 
-            // radioButton4
-            // 
-            this.radioButton4.AutoSize = true;
-            this.radioButton4.Location = new System.Drawing.Point(6, 22);
-            this.radioButton4.Name = "radioButton4";
-            this.radioButton4.Size = new System.Drawing.Size(74, 20);
-            this.radioButton4.TabIndex = 2;
-            this.radioButton4.TabStop = true;
-            this.radioButton4.Text = "Disabled";
-            this.radioButton4.UseVisualStyleBackColor = true;
-            // 
-            // radioButton5
-            // 
-            this.radioButton5.AutoSize = true;
-            this.radioButton5.Location = new System.Drawing.Point(143, 22);
-            this.radioButton5.Name = "radioButton5";
-            this.radioButton5.Size = new System.Drawing.Size(57, 20);
-            this.radioButton5.TabIndex = 0;
-            this.radioButton5.Text = "LZMA";
-            this.radioButton5.UseVisualStyleBackColor = true;
-            // 
-            // radioButton6
-            // 
-            this.radioButton6.AutoSize = true;
-            this.radioButton6.Checked = true;
-            this.radioButton6.Location = new System.Drawing.Point(86, 22);
-            this.radioButton6.Name = "radioButton6";
-            this.radioButton6.Size = new System.Drawing.Size(52, 20);
-            this.radioButton6.TabIndex = 1;
-            this.radioButton6.TabStop = true;
-            this.radioButton6.Text = "GZIP";
-            this.radioButton6.UseVisualStyleBackColor = true;
-            // 
-            // radioButton7
-            // 
-            this.radioButton7.AutoSize = true;
-            this.radioButton7.Location = new System.Drawing.Point(6, 22);
-            this.radioButton7.Name = "radioButton7";
-            this.radioButton7.Size = new System.Drawing.Size(74, 20);
-            this.radioButton7.TabIndex = 3;
-            this.radioButton7.TabStop = true;
-            this.radioButton7.Text = "Disabled";
-            this.radioButton7.UseVisualStyleBackColor = true;
             // 
             // numPort
             // 
@@ -200,31 +87,147 @@
             this.label2.TabIndex = 12;
             this.label2.Text = "Port:";
             // 
-            // button1
+            // groupBox3
             // 
-            this.button1.Location = new System.Drawing.Point(236, 249);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 3;
-            this.button1.Text = "Cancel";
-            this.button1.UseVisualStyleBackColor = true;
+            this.groupBox3.Controls.Add(this.groupBox5);
+            this.groupBox3.Controls.Add(this.groupBox4);
+            this.groupBox3.Location = new System.Drawing.Point(12, 93);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(310, 150);
+            this.groupBox3.TabIndex = 2;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "Transfer Configuration";
             // 
-            // button2
+            // groupBox5
             // 
-            this.button2.Location = new System.Drawing.Point(155, 249);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 23);
-            this.button2.TabIndex = 4;
-            this.button2.Text = "&Confirm";
-            this.button2.UseVisualStyleBackColor = true;
+            this.groupBox5.Controls.Add(this.cbLZMA);
+            this.groupBox5.Controls.Add(this.cbGZIP);
+            this.groupBox5.Controls.Add(this.cbDisableCompression);
+            this.groupBox5.Location = new System.Drawing.Point(10, 84);
+            this.groupBox5.Name = "groupBox5";
+            this.groupBox5.Size = new System.Drawing.Size(289, 56);
+            this.groupBox5.TabIndex = 3;
+            this.groupBox5.TabStop = false;
+            this.groupBox5.Text = "Compression Algorithm";
+            // 
+            // cbLZMA
+            // 
+            this.cbLZMA.AutoSize = true;
+            this.cbLZMA.Enabled = false;
+            this.cbLZMA.Location = new System.Drawing.Point(143, 22);
+            this.cbLZMA.Name = "cbLZMA";
+            this.cbLZMA.Size = new System.Drawing.Size(57, 20);
+            this.cbLZMA.TabIndex = 0;
+            this.cbLZMA.Text = "LZMA";
+            this.cbLZMA.UseVisualStyleBackColor = true;
+            // 
+            // cbGZIP
+            // 
+            this.cbGZIP.AutoSize = true;
+            this.cbGZIP.Checked = true;
+            this.cbGZIP.Location = new System.Drawing.Point(86, 22);
+            this.cbGZIP.Name = "cbGZIP";
+            this.cbGZIP.Size = new System.Drawing.Size(52, 20);
+            this.cbGZIP.TabIndex = 1;
+            this.cbGZIP.TabStop = true;
+            this.cbGZIP.Text = "GZIP";
+            this.cbGZIP.UseVisualStyleBackColor = true;
+            // 
+            // cbDisableCompression
+            // 
+            this.cbDisableCompression.AutoSize = true;
+            this.cbDisableCompression.Location = new System.Drawing.Point(6, 22);
+            this.cbDisableCompression.Name = "cbDisableCompression";
+            this.cbDisableCompression.Size = new System.Drawing.Size(74, 20);
+            this.cbDisableCompression.TabIndex = 2;
+            this.cbDisableCompression.TabStop = true;
+            this.cbDisableCompression.Text = "Disabled";
+            this.cbDisableCompression.UseVisualStyleBackColor = true;
+            // 
+            // groupBox4
+            // 
+            this.groupBox4.Controls.Add(this.cbDisabledCrypto);
+            this.groupBox4.Controls.Add(this.cbAES);
+            this.groupBox4.Controls.Add(this.cbRC4);
+            this.groupBox4.Controls.Add(this.cbXOR);
+            this.groupBox4.Location = new System.Drawing.Point(10, 22);
+            this.groupBox4.Name = "groupBox4";
+            this.groupBox4.Size = new System.Drawing.Size(289, 56);
+            this.groupBox4.TabIndex = 0;
+            this.groupBox4.TabStop = false;
+            this.groupBox4.Text = "Encryption Algorithm";
+            // 
+            // cbDisabledCrypto
+            // 
+            this.cbDisabledCrypto.AutoSize = true;
+            this.cbDisabledCrypto.Location = new System.Drawing.Point(6, 22);
+            this.cbDisabledCrypto.Name = "cbDisabledCrypto";
+            this.cbDisabledCrypto.Size = new System.Drawing.Size(74, 20);
+            this.cbDisabledCrypto.TabIndex = 3;
+            this.cbDisabledCrypto.TabStop = true;
+            this.cbDisabledCrypto.Text = "Disabled";
+            this.cbDisabledCrypto.UseVisualStyleBackColor = true;
+            // 
+            // cbAES
+            // 
+            this.cbAES.AutoSize = true;
+            this.cbAES.Location = new System.Drawing.Point(198, 22);
+            this.cbAES.Name = "cbAES";
+            this.cbAES.Size = new System.Drawing.Size(49, 20);
+            this.cbAES.TabIndex = 2;
+            this.cbAES.Text = "AES";
+            this.cbAES.UseVisualStyleBackColor = true;
+            // 
+            // cbRC4
+            // 
+            this.cbRC4.AutoSize = true;
+            this.cbRC4.Checked = true;
+            this.cbRC4.Location = new System.Drawing.Point(143, 22);
+            this.cbRC4.Name = "cbRC4";
+            this.cbRC4.Size = new System.Drawing.Size(49, 20);
+            this.cbRC4.TabIndex = 0;
+            this.cbRC4.TabStop = true;
+            this.cbRC4.Text = "RC4";
+            this.cbRC4.UseVisualStyleBackColor = true;
+            // 
+            // cbXOR
+            // 
+            this.cbXOR.AutoSize = true;
+            this.cbXOR.Location = new System.Drawing.Point(86, 22);
+            this.cbXOR.Name = "cbXOR";
+            this.cbXOR.Size = new System.Drawing.Size(51, 20);
+            this.cbXOR.TabIndex = 1;
+            this.cbXOR.TabStop = true;
+            this.cbXOR.Text = "XOR";
+            this.cbXOR.UseVisualStyleBackColor = true;
+            // 
+            // btnCancel
+            // 
+            this.btnCancel.Location = new System.Drawing.Point(236, 249);
+            this.btnCancel.Name = "btnCancel";
+            this.btnCancel.Size = new System.Drawing.Size(75, 23);
+            this.btnCancel.TabIndex = 3;
+            this.btnCancel.Text = "Cancel";
+            this.btnCancel.UseVisualStyleBackColor = true;
+            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
+            // 
+            // btnConfirm
+            // 
+            this.btnConfirm.Location = new System.Drawing.Point(155, 249);
+            this.btnConfirm.Name = "btnConfirm";
+            this.btnConfirm.Size = new System.Drawing.Size(75, 23);
+            this.btnConfirm.TabIndex = 4;
+            this.btnConfirm.Text = "&Confirm";
+            this.btnConfirm.UseVisualStyleBackColor = true;
+            this.btnConfirm.Click += new System.EventHandler(this.btnConfirm_Click);
             // 
             // frmPreferences
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(334, 282);
-            this.Controls.Add(this.button2);
-            this.Controls.Add(this.button1);
+            this.ClientSize = new System.Drawing.Size(334, 284);
+            this.Controls.Add(this.btnConfirm);
+            this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox1);
             this.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -233,16 +236,17 @@
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "frmPreferences";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "frmPreferences";
             this.Load += new System.EventHandler(this.frmPreferences_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numPort)).EndInit();
             this.groupBox3.ResumeLayout(false);
-            this.groupBox4.ResumeLayout(false);
-            this.groupBox4.PerformLayout();
             this.groupBox5.ResumeLayout(false);
             this.groupBox5.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numPort)).EndInit();
+            this.groupBox4.ResumeLayout(false);
+            this.groupBox4.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -252,17 +256,17 @@
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.GroupBox groupBox5;
-        private System.Windows.Forms.RadioButton radioButton5;
-        private System.Windows.Forms.RadioButton radioButton6;
-        private System.Windows.Forms.RadioButton radioButton4;
+        private System.Windows.Forms.RadioButton cbLZMA;
+        private System.Windows.Forms.RadioButton cbGZIP;
+        private System.Windows.Forms.RadioButton cbDisableCompression;
         private System.Windows.Forms.GroupBox groupBox4;
-        private System.Windows.Forms.RadioButton radioButton7;
-        private System.Windows.Forms.RadioButton radioButton3;
-        private System.Windows.Forms.RadioButton radioButton1;
-        private System.Windows.Forms.RadioButton radioButton2;
+        private System.Windows.Forms.RadioButton cbDisabledCrypto;
+        private System.Windows.Forms.RadioButton cbAES;
+        private System.Windows.Forms.RadioButton cbRC4;
+        private System.Windows.Forms.RadioButton cbXOR;
         private System.Windows.Forms.NumericUpDown numPort;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button btnCancel;
+        private System.Windows.Forms.Button btnConfirm;
     }
 }

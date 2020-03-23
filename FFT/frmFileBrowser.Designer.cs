@@ -48,7 +48,15 @@
             this.mnuTransfers = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.pauseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cancelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripSeparator();
+            this.clearSelectedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.btnGo = new System.Windows.Forms.Button();
+            this.txtQuick = new System.Windows.Forms.TextBox();
+            this.stsStrip = new System.Windows.Forms.StatusStrip();
+            this.toolStripStatusLabel3 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.lblCompressionMode = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.lblEncryption = new System.Windows.Forms.ToolStripStatusLabel();
             this.lstTransfers = new FFT.Core.UI.FancyListView();
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -56,13 +64,12 @@
             this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader7 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader6 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader8 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.lstFiles = new FFT.Core.UI.FancyListView();
-            this.txtQuick = new System.Windows.Forms.TextBox();
-            this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripSeparator();
-            this.clearSelectedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuFiles.SuspendLayout();
             this.mnuTransfers.SuspendLayout();
+            this.stsStrip.SuspendLayout();
             this.SuspendLayout();
             // 
             // label1
@@ -189,32 +196,90 @@
             this.toolStripMenuItem3,
             this.clearSelectedToolStripMenuItem});
             this.mnuTransfers.Name = "mnuTransfers";
-            this.mnuTransfers.Size = new System.Drawing.Size(181, 98);
+            this.mnuTransfers.Size = new System.Drawing.Size(170, 76);
             this.mnuTransfers.Opening += new System.ComponentModel.CancelEventHandler(this.mnuTransfers_Opening);
             // 
             // pauseToolStripMenuItem
             // 
             this.pauseToolStripMenuItem.Name = "pauseToolStripMenuItem";
-            this.pauseToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.pauseToolStripMenuItem.Size = new System.Drawing.Size(169, 22);
             this.pauseToolStripMenuItem.Text = "Suspend/Resume";
             this.pauseToolStripMenuItem.Click += new System.EventHandler(this.pauseToolStripMenuItem_Click);
             // 
             // cancelToolStripMenuItem
             // 
             this.cancelToolStripMenuItem.Name = "cancelToolStripMenuItem";
-            this.cancelToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.cancelToolStripMenuItem.Size = new System.Drawing.Size(169, 22);
             this.cancelToolStripMenuItem.Text = "Cancel";
             this.cancelToolStripMenuItem.Click += new System.EventHandler(this.cancelToolStripMenuItem_Click);
             // 
+            // toolStripMenuItem3
+            // 
+            this.toolStripMenuItem3.Name = "toolStripMenuItem3";
+            this.toolStripMenuItem3.Size = new System.Drawing.Size(166, 6);
+            // 
+            // clearSelectedToolStripMenuItem
+            // 
+            this.clearSelectedToolStripMenuItem.Name = "clearSelectedToolStripMenuItem";
+            this.clearSelectedToolStripMenuItem.Size = new System.Drawing.Size(169, 22);
+            this.clearSelectedToolStripMenuItem.Text = "Clear Selected";
+            this.clearSelectedToolStripMenuItem.Click += new System.EventHandler(this.clearSelectedToolStripMenuItem_Click);
+            // 
             // btnGo
             // 
-            this.btnGo.Location = new System.Drawing.Point(716, 12);
+            this.btnGo.Location = new System.Drawing.Point(797, 11);
             this.btnGo.Name = "btnGo";
             this.btnGo.Size = new System.Drawing.Size(37, 23);
             this.btnGo.TabIndex = 4;
             this.btnGo.Text = "GO";
             this.btnGo.UseVisualStyleBackColor = true;
             this.btnGo.Click += new System.EventHandler(this.btnGo_Click);
+            // 
+            // txtQuick
+            // 
+            this.txtQuick.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtQuick.Location = new System.Drawing.Point(87, 12);
+            this.txtQuick.Name = "txtQuick";
+            this.txtQuick.Size = new System.Drawing.Size(704, 23);
+            this.txtQuick.TabIndex = 5;
+            // 
+            // stsStrip
+            // 
+            this.stsStrip.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.stsStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripStatusLabel3,
+            this.lblCompressionMode,
+            this.toolStripStatusLabel1,
+            this.lblEncryption});
+            this.stsStrip.Location = new System.Drawing.Point(0, 598);
+            this.stsStrip.Name = "stsStrip";
+            this.stsStrip.Size = new System.Drawing.Size(846, 22);
+            this.stsStrip.TabIndex = 6;
+            this.stsStrip.Text = "statusStrip1";
+            // 
+            // toolStripStatusLabel3
+            // 
+            this.toolStripStatusLabel3.Name = "toolStripStatusLabel3";
+            this.toolStripStatusLabel3.Size = new System.Drawing.Size(113, 17);
+            this.toolStripStatusLabel3.Text = "Compression Mode:";
+            // 
+            // lblCompressionMode
+            // 
+            this.lblCompressionMode.Name = "lblCompressionMode";
+            this.lblCompressionMode.Size = new System.Drawing.Size(11, 17);
+            this.lblCompressionMode.Text = "-";
+            // 
+            // toolStripStatusLabel1
+            // 
+            this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(103, 17);
+            this.toolStripStatusLabel1.Text = "Encryption Mode:";
+            // 
+            // lblEncryption
+            // 
+            this.lblEncryption.Name = "lblEncryption";
+            this.lblEncryption.Size = new System.Drawing.Size(11, 17);
+            this.lblEncryption.Text = "-";
             // 
             // lstTransfers
             // 
@@ -226,14 +291,15 @@
             this.columnHeader3,
             this.columnHeader4,
             this.columnHeader7,
+            this.columnHeader6,
             this.columnHeader8});
             this.lstTransfers.ContextMenuStrip = this.mnuTransfers;
             this.lstTransfers.FullRowSelect = true;
             this.lstTransfers.HideSelection = false;
-            this.lstTransfers.Location = new System.Drawing.Point(12, 435);
+            this.lstTransfers.Location = new System.Drawing.Point(12, 419);
             this.lstTransfers.MultiSelect = false;
             this.lstTransfers.Name = "lstTransfers";
-            this.lstTransfers.Size = new System.Drawing.Size(741, 170);
+            this.lstTransfers.Size = new System.Drawing.Size(822, 170);
             this.lstTransfers.TabIndex = 3;
             this.lstTransfers.UseCompatibleStateImageBehavior = false;
             this.lstTransfers.View = System.Windows.Forms.View.Details;
@@ -247,7 +313,7 @@
             // columnHeader5
             // 
             this.columnHeader5.Text = "Status";
-            this.columnHeader5.Width = 87;
+            this.columnHeader5.Width = 105;
             // 
             // columnHeader2
             // 
@@ -267,12 +333,17 @@
             // columnHeader7
             // 
             this.columnHeader7.Text = "Sent";
-            this.columnHeader7.Width = 81;
+            this.columnHeader7.Width = 83;
+            // 
+            // columnHeader6
+            // 
+            this.columnHeader6.Text = "Speed";
+            this.columnHeader6.Width = 80;
             // 
             // columnHeader8
             // 
             this.columnHeader8.Text = "Progress";
-            this.columnHeader8.Width = 176;
+            this.columnHeader8.Width = 159;
             // 
             // lstFiles
             // 
@@ -285,37 +356,18 @@
             this.lstFiles.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.lstFiles.MultiSelect = false;
             this.lstFiles.Name = "lstFiles";
-            this.lstFiles.Size = new System.Drawing.Size(741, 385);
+            this.lstFiles.Size = new System.Drawing.Size(822, 369);
             this.lstFiles.SmallImageList = this.lstIcons;
             this.lstFiles.TabIndex = 0;
             this.lstFiles.UseCompatibleStateImageBehavior = false;
             this.lstFiles.View = System.Windows.Forms.View.Details;
             // 
-            // txtQuick
-            // 
-            this.txtQuick.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtQuick.Location = new System.Drawing.Point(87, 12);
-            this.txtQuick.Name = "txtQuick";
-            this.txtQuick.Size = new System.Drawing.Size(623, 23);
-            this.txtQuick.TabIndex = 5;
-            // 
-            // toolStripMenuItem3
-            // 
-            this.toolStripMenuItem3.Name = "toolStripMenuItem3";
-            this.toolStripMenuItem3.Size = new System.Drawing.Size(177, 6);
-            // 
-            // clearSelectedToolStripMenuItem
-            // 
-            this.clearSelectedToolStripMenuItem.Name = "clearSelectedToolStripMenuItem";
-            this.clearSelectedToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.clearSelectedToolStripMenuItem.Text = "Clear Selected";
-            this.clearSelectedToolStripMenuItem.Click += new System.EventHandler(this.clearSelectedToolStripMenuItem_Click);
-            // 
             // frmFileBrowser
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(765, 617);
+            this.ClientSize = new System.Drawing.Size(846, 620);
+            this.Controls.Add(this.stsStrip);
             this.Controls.Add(this.txtQuick);
             this.Controls.Add(this.btnGo);
             this.Controls.Add(this.lstTransfers);
@@ -332,6 +384,8 @@
             this.Load += new System.EventHandler(this.frmFileBrowser_Load);
             this.mnuFiles.ResumeLayout(false);
             this.mnuTransfers.ResumeLayout(false);
+            this.stsStrip.ResumeLayout(false);
+            this.stsStrip.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -370,5 +424,11 @@
         private System.Windows.Forms.TextBox txtQuick;
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem3;
         private System.Windows.Forms.ToolStripMenuItem clearSelectedToolStripMenuItem;
+        private System.Windows.Forms.StatusStrip stsStrip;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel3;
+        private System.Windows.Forms.ToolStripStatusLabel lblCompressionMode;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
+        private System.Windows.Forms.ToolStripStatusLabel lblEncryption;
+        private System.Windows.Forms.ColumnHeader columnHeader6;
     }
 }

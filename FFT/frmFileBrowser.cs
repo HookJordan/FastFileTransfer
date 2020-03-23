@@ -1,4 +1,6 @@
-﻿using FFT.Core.IO;
+﻿using FFT.Core.Compression;
+using FFT.Core.Encryption;
+using FFT.Core.IO;
 using FFT.Core.Networking;
 using FFT.Core.UI;
 using Microsoft.VisualBasic;
@@ -28,13 +30,18 @@ namespace FFT
 
             InitializeComponent();
 
+            this.FormClosing += FrmFileBrowser_FormClosing;
+
+            // Overrides for drawing progressbar
             this.lstFiles.DoubleClick += LstFiles_DoubleClick;
-            this.FormClosed += FrmFileBrowser_FormClosed;
-
             lstTransfers.OwnerDraw = true;
-
             lstTransfers.DrawColumnHeader += LstTransfers_DrawColumnHeader;
             lstTransfers.DrawItem += LstTransfers_DrawItem;
+        }
+
+        private void FrmFileBrowser_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            this.client.Send(Packet.Create(PacketHeader.GoodBye, ""));
         }
 
         private void LstTransfers_DrawItem(object sender, DrawListViewItemEventArgs e)
@@ -54,11 +61,6 @@ namespace FFT
         private void LstTransfers_DrawColumnHeader(object sender, DrawListViewColumnHeaderEventArgs e)
         {
             e.DrawDefault = true;
-        }
-
-        private void FrmFileBrowser_FormClosed(object sender, FormClosedEventArgs e)
-        {
-            this.client.Close();
         }
 
         private void LstFiles_DoubleClick(object sender, EventArgs e)
@@ -96,6 +98,7 @@ namespace FFT
                             case PacketHeader.PingPong:
                                 // Load initial drive listing
                                 this.client.Send(Packet.Create(PacketHeader.GetDrives, "NOW"));
+                                UpdateStatusStrip();
                                 break;
                             case PacketHeader.DrivesResponse:
                                 setDriveColumns();
@@ -207,6 +210,30 @@ namespace FFT
                         }
                     });
                 }
+            }
+        }
+
+        private void UpdateStatusStrip()
+        {
+            lblCompressionMode.Text = client.compressionProvider.algorithm.ToString();
+            lblEncryption.Text = client.cryptoProvider.algorithm.ToString();
+
+            if (client.compressionProvider.algorithm == CompressionAlgorithm.Disabled)
+            {
+                lblCompressionMode.ForeColor = Color.Red;
+            }
+            else
+            {
+                lblCompressionMode.ForeColor = Color.Green;
+            }
+
+            if (client.cryptoProvider.algorithm == CryptoAlgorithm.Disabled)
+            {
+                lblEncryption.ForeColor = Color.Red;
+            }
+            else
+            {
+                lblEncryption.ForeColor = Color.Green;
             }
         }
 
@@ -361,7 +388,8 @@ namespace FFT
                 fileTransfer.LocalFilePath,
                 fileTransfer.RemoteFilePath,
                 FileExplorer.GetSize(fileTransfer.FileLength),
-                "NA",
+                "-",
+                "-",
                 ""
             });
             item.Tag = fileTransfer.TransferId;
@@ -407,7 +435,8 @@ namespace FFT
             ProgressBar progressBar = lstTransfers.Controls.OfType<ProgressBar>().FirstOrDefault(i => (string)i.Tag == fileTransfer.TransferId);
 
             progressBar.Value = fileTransfer.CalculatePct();
-            item.SubItems[item.SubItems.Count - 2].Text = FileExplorer.GetSize(fileTransfer.Transferred());
+            item.SubItems[item.SubItems.Count - 3].Text = FileExplorer.GetSize(fileTransfer.Transferred());
+            item.SubItems[item.SubItems.Count - 2].Text = FileExplorer.GetSize(fileTransfer.PER_SECOND);
 
             if (!fileTransfer.Transfering)
             {
@@ -422,6 +451,7 @@ namespace FFT
 
             progressBar.Visible = false;
 
+            item.SubItems[item.SubItems.Count - 3].Text = "-";
             item.SubItems[item.SubItems.Count - 2].Text = "-";
             item.SubItems[1].Text = "Cancelled";
         }
@@ -555,6 +585,7 @@ namespace FFT
             else
             {
                 item.SubItems[1].Text = "Suspended";
+                item.SubItems[item.SubItems.Count - 1].Text = "-";
             }
             
         }

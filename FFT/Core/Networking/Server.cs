@@ -45,6 +45,16 @@ namespace FFT.Core.Networking
             }
         }
 
+        public void ChangePort(int port)
+        {
+            if (port != this.Port)
+            {
+                this.Stop();
+                this.Port = port;
+                this.Start();
+            }
+        }
+
         public void Stop()
         {
             this.Running = false;
@@ -52,7 +62,6 @@ namespace FFT.Core.Networking
             if (this.listener != null)
             {
                 this.listener.Close();
-                this.listener.Dispose();
             }
         }
 
@@ -68,10 +77,6 @@ namespace FFT.Core.Networking
 
                     // Await next connection
                     this.listener.BeginAccept(this.AcceptSocket, null);
-                }
-                else
-                {
-                    incoming.Close();
                 }
             }
             catch (Exception e)

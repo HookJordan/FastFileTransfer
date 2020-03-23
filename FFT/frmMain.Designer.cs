@@ -57,6 +57,10 @@
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
+            this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.lblCompressionMode = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusLabel3 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.lblEncryption = new System.Windows.Forms.ToolStripStatusLabel();
             this.menuStrip1.SuspendLayout();
             this.stsStrip.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -144,8 +148,12 @@
             // 
             this.stsStrip.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.stsStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripStatusLabel2,
+            this.stsStatus,
+            this.toolStripStatusLabel3,
+            this.lblCompressionMode,
             this.toolStripStatusLabel1,
-            this.stsStatus});
+            this.lblEncryption});
             this.stsStrip.Location = new System.Drawing.Point(0, 271);
             this.stsStrip.Name = "stsStrip";
             this.stsStrip.Size = new System.Drawing.Size(620, 22);
@@ -155,8 +163,8 @@
             // toolStripStatusLabel1
             // 
             this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(46, 17);
-            this.toolStripStatusLabel1.Text = "Status:";
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(103, 17);
+            this.toolStripStatusLabel1.Text = "Encryption Mode:";
             // 
             // stsStatus
             // 
@@ -331,6 +339,30 @@
             this.label6.TabIndex = 5;
             this.label6.Text = "Port:";
             // 
+            // toolStripStatusLabel2
+            // 
+            this.toolStripStatusLabel2.Name = "toolStripStatusLabel2";
+            this.toolStripStatusLabel2.Size = new System.Drawing.Size(46, 17);
+            this.toolStripStatusLabel2.Text = "Status:";
+            // 
+            // lblCompressionMode
+            // 
+            this.lblCompressionMode.Name = "lblCompressionMode";
+            this.lblCompressionMode.Size = new System.Drawing.Size(11, 17);
+            this.lblCompressionMode.Text = "-";
+            // 
+            // toolStripStatusLabel3
+            // 
+            this.toolStripStatusLabel3.Name = "toolStripStatusLabel3";
+            this.toolStripStatusLabel3.Size = new System.Drawing.Size(113, 17);
+            this.toolStripStatusLabel3.Text = "Compression Mode:";
+            // 
+            // lblEncryption
+            // 
+            this.lblEncryption.Name = "lblEncryption";
+            this.lblEncryption.Size = new System.Drawing.Size(11, 17);
+            this.lblEncryption.Text = "-";
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 19F);
@@ -395,6 +427,10 @@
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.NumericUpDown numPort;
         private System.Windows.Forms.TextBox txtIncomePort;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel2;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel3;
+        private System.Windows.Forms.ToolStripStatusLabel lblCompressionMode;
+        private System.Windows.Forms.ToolStripStatusLabel lblEncryption;
     }
 }
 

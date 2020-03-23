@@ -10,9 +10,9 @@ namespace FFT.Core.Encryption
 {
     class AES
     {
+        private static byte[] SALT = Encoding.ASCII.GetBytes("FFT - FastFileTransfer - AES SALT");
         public static byte[] Encrypt(byte[] input, byte[] password)
         {
-            byte[] SALT = Encoding.ASCII.GetBytes("FFT - FastFileTransfer - AES SALT");
             byte[] encrypted = null;
             using (MemoryStream ms = new MemoryStream())
             {
@@ -44,7 +44,6 @@ namespace FFT.Core.Encryption
 
         public static byte[] Decrypt(byte[] input, byte[] password)
         {
-            byte[] SALT = Encoding.ASCII.GetBytes("FFT - FastFileTransfer - AES SALT");
             byte[] decrypted = null; 
             using (MemoryStream ms = new MemoryStream())
             {

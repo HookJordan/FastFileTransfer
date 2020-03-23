@@ -58,12 +58,12 @@
   <ItemGroup>
     <Compile Include="Core\Compression\CompressionProvider.cs" />
     <Compile Include="Core\Compression\GZip.cs" />
+    <Compile Include="Core\Configuration.cs" />
     <Compile Include="Core\Encryption\AES.cs" />
     <Compile Include="Core\Encryption\CryptoProvider.cs" />
     <Compile Include="Core\Encryption\SHA.cs" />
     <Compile Include="Core\Encryption\RC4.cs" />
     <Compile Include="Core\Encryption\XOR.cs" />
-    <Compile Include="Core\IO\Compression.cs" />
     <Compile Include="Core\IO\FileExplorer.cs" />
     <Compile Include="Core\IO\FileTransfer.cs" />
     <Compile Include="Core\IO\TransferManager.cs" />

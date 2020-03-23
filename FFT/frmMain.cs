@@ -1,4 +1,5 @@
-﻿using FFT.Core.Compression;
+﻿using FFT.Core;
+using FFT.Core.Compression;
 using FFT.Core.Encryption;
 using FFT.Core.IO;
 using FFT.Core.Networking;
@@ -20,7 +21,7 @@ namespace FFT
         private Server server;
         private Client client;
         private Client incomingClient;
-        private CompressionProvider compressionProvider;
+        private Configuration configuration;
 
         public frmMain()
         {
@@ -40,7 +41,6 @@ namespace FFT
 
             // Load user config
             this.loadPreferences();
-            this.compressionProvider = new CompressionProvider(CompressionAlgorithm.GZIP);
 
             // Start waiting for incoming connections
             this.startServer();
@@ -73,7 +73,7 @@ namespace FFT
             if (this.incomingClient == null || !this.incomingClient.Connected)
             {
                 this.server.AcceptingConnections = false;
-                incomingClient = new Client(socket, this.txtIncomePass.Text, compressionProvider, new CryptoProvider(CryptoAlgorithm.AES, server.Password));
+                incomingClient = new Client(socket, this.txtIncomePass.Text, new CompressionProvider(configuration.compressionAlgorithm), new CryptoProvider(configuration.cryptoAlgorithm, server.Password));
                 incomingClient.PacketReceived += Client_PacketReceived;
                 incomingClient.Disconnected += IncomingClient_Disconnected;
 
@@ -96,7 +96,9 @@ namespace FFT
 
         private void IncomingClient_Disconnected(Client client)
         {
+            this.incomingClient = null;
             this.server.AcceptingConnections = true;
+
             Invoke((MethodInvoker)delegate
             {
                 this.stsStatus.Text = "Awaiting Connection";
@@ -107,6 +109,34 @@ namespace FFT
         private void loadPreferences()
         {
             // todo: Load user configuration (load user defined port and defined password is exists)
+            this.configuration = Configuration.FromFile("config.data");
+            this.txtIncomePort.Text = configuration.Port.ToString();
+
+            UpdateStatusStrip();   
+        }
+
+        private void UpdateStatusStrip()
+        {
+            lblCompressionMode.Text = configuration.compressionAlgorithm.ToString();
+            lblEncryption.Text = configuration.cryptoAlgorithm.ToString();
+
+            if (configuration.compressionAlgorithm == CompressionAlgorithm.Disabled)
+            {
+                lblCompressionMode.ForeColor = Color.Red;
+            }
+            else
+            {
+                lblCompressionMode.ForeColor = Color.Green;
+            }
+
+            if (configuration.cryptoAlgorithm == CryptoAlgorithm.Disabled)
+            {
+                lblEncryption.ForeColor = Color.Red;
+            }
+            else
+            {
+                lblEncryption.ForeColor = Color.Green;
+            }
         }
 
         private void refreshIncomePass()
@@ -179,6 +209,11 @@ namespace FFT
             if (p.PacketHeader != PacketHeader.FileChunk)
             {
                 Console.WriteLine($"Received packet {p.PacketHeader} from {client.IP}:{client.Port}");
+
+                if (p.PacketHeader == PacketHeader.GoodBye)
+                {
+                    client.TriggerDisconnect();
+                }
             }
 
             FileExplorer.HandlePacket(client, p);
@@ -202,11 +237,20 @@ namespace FFT
 
         private void preferencesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            using (frmPreferences preferences = new frmPreferences())
+            using (frmPreferences preferences = new frmPreferences(configuration))
             {
-                preferences.ShowDialog();
+                if (preferences.ShowDialog() == DialogResult.OK)
+                {
+                    // Save Configuration
+                    configuration = preferences.configuration;
+                    configuration.Save("config.data");
 
-                // Save Configuration
+                    this.txtIncomePort.Text = configuration.Port.ToString();
+                    this.server.ChangePort(configuration.Port);
+
+                    // Update Display of other settings
+                    this.UpdateStatusStrip();
+                }
             }
         }
     }

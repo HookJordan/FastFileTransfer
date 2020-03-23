@@ -25,6 +25,10 @@ namespace FFT.Core.IO
 
         private CompressionProvider compressionProvider;
 
+        private long LAST_TICK = 0;
+        private long PER_SECOND_DELTA = 0;
+        public long PER_SECOND { get; private set; } = 0;
+
         public bool Transfering 
         { 
             get
@@ -77,6 +81,8 @@ namespace FFT.Core.IO
             {
                 Finish();
             }
+
+            UpdateSpeed(chunk.Length);
         }
 
         public byte[] GetChunk()
@@ -96,12 +102,30 @@ namespace FFT.Core.IO
                 Finish();
             }
 
+            UpdateSpeed(read);
+
             // long lenBeforeCompress = buffer.Length;
             // byte[] compress = Compression.Compress(buffer);
             // long lenAfterCompress = compress.Length;
             // Console.WriteLine($"Before {lenBeforeCompress} - After {lenAfterCompress}");
 
             return compressionProvider.Compress(buffer); // Compression.Compress(buffer);
+        }
+
+        private void UpdateSpeed(int amount)
+        {
+            long now = Environment.TickCount;
+
+            if (now - LAST_TICK >= 1000)
+            {
+                PER_SECOND = PER_SECOND_DELTA;
+                PER_SECOND_DELTA = amount;
+                LAST_TICK = now;
+            }
+            else
+            {
+                PER_SECOND_DELTA += amount;
+            }
         }
 
         public void Finish()

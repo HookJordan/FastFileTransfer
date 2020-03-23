@@ -198,6 +198,11 @@ namespace FFT.Core.Networking
             }
         }
 
+        public void TriggerDisconnect()
+        {
+            this.Disconnected?.Invoke(this);
+        }
+
         // Events
         public delegate void PacketReceivedHandler(Client client, byte[] payload);
         public event PacketReceivedHandler PacketReceived;
