@@ -78,6 +78,9 @@ namespace FFT.Core.Networking
                     this.socket.Send(BitConverter.GetBytes(payload.Length));
                     this.socket.Send(payload);
 
+                    // Notify Ready
+                    this.ClientReady?.Invoke(this);
+
                     this.socket.BeginReceive(new byte[] { 0 }, 0, 0, 0, BeginReceiveConfigurations, null);
                 }
             }
@@ -101,6 +104,9 @@ namespace FFT.Core.Networking
                 byte[] encryptionMode = new byte[4];
                 this.socket.Receive(encryptionMode);
                 this.cryptoProvider = new CryptoProvider((CryptoAlgorithm)BitConverter.ToInt32(encryptionMode, 0), this.Password);
+
+                // Notify Ready
+                this.ClientReady?.Invoke(this);
 
                 // Begin receiving real data now
                 this.socket.BeginReceive(new byte[] { 0 }, 0, 0, 0, Receive, null);
@@ -211,6 +217,7 @@ namespace FFT.Core.Networking
         public event PacketReceivedHandler PacketReceived;
         public delegate void DisconnectedHandler(Client client);
         public event DisconnectedHandler Disconnected;
-
+        public delegate void ClientReadyHandler(Client client);
+        public event ClientReadyHandler ClientReady;
     }
 }

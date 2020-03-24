@@ -96,6 +96,7 @@ namespace FFT
 
             // Begin Handling incoming packets
             this.client.PacketReceived += Client_PacketReceived;
+            this.client.ClientReady += Client_ClientReady;
 
             // Set Listview to drives view
             this.setDriveColumns(true);
@@ -103,7 +104,19 @@ namespace FFT
             // Setup listview icons
             lstIcons.Images.Add(IconReader.GetFileIcon("", IconReader.IconSize.Small, false));
             lstIcons.Images.Add(IconReader.GetFileIcon("dummy", IconReader.IconSize.Small, false));
-            lstIcons.Images.Add(IconReader.GetFolderIcon(IconReader.IconSize.Small, IconReader.FolderType.Open));
+            lstIcons.Images.Add(IconReader.GetFolderIcon(IconReader.IconSize.Small, IconReader.FolderType.Open));            
+        }
+
+        private void Client_ClientReady(Client client)
+        {
+            Invoke((MethodInvoker)delegate
+            {
+                // Update connnection information
+                UpdateStatusStrip();
+            });
+
+            // Load drives
+            client.Send(Packet.Create(PacketHeader.GetDrives, "NOW"));
         }
 
         private void Client_PacketReceived(Client client, byte[] payload)
@@ -117,11 +130,6 @@ namespace FFT
                     {
                         switch (p.PacketHeader)
                         {
-                            case PacketHeader.PingPong:
-                                // Load initial drive listing
-                                this.client.Send(Packet.Create(PacketHeader.GetDrives, "NOW"));
-                                UpdateStatusStrip();
-                                break;
                             case PacketHeader.DrivesResponse:
                                 setDriveColumns();
                                 int rows = br.ReadInt32();

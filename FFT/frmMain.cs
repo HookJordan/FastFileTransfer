@@ -117,8 +117,16 @@ namespace FFT
 
         private void UpdateStatusStrip()
         {
-            lblCompressionMode.Text = configuration.compressionAlgorithm.ToString();
-            lblEncryption.Text = configuration.cryptoAlgorithm.ToString();
+            //if (client != null && client.Connected)
+            //{
+            //    lblCompressionMode.Text = client.compressionProvider.algorithm.ToString();
+            //    lblEncryption.Text = client.cryptoProvider.algorithm.ToString();
+            //}
+            //else
+            {
+                lblCompressionMode.Text = configuration.compressionAlgorithm.ToString();
+                lblEncryption.Text = configuration.cryptoAlgorithm.ToString();
+            }
 
             if (configuration.compressionAlgorithm == CompressionAlgorithm.Disabled)
             {
@@ -200,6 +208,7 @@ namespace FFT
         private void Fb_FormClosing(object sender, FormClosingEventArgs e)
         {
             btnConnect.Enabled = true;
+            UpdateStatusStrip();
         }
 
         private void Client_PacketReceived(Client client, byte[] payload)
