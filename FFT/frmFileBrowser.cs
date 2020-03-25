@@ -19,7 +19,7 @@ namespace FFT
 {
     public partial class frmFileBrowser : Form
     {
-        TransferManager transfers = new TransferManager();
+        readonly TransferManager transfers = new TransferManager();
         string currentPath = "";
         private bool drives = true;
         ListViewItem lastItem = null; 

@@ -1,25 +1,17 @@
-﻿using System;
-using System.Text;
-
-namespace FFT.Core.Encryption
+﻿namespace FFT.Core.Encryption
 {
     class RC4
     {
-        public static void Perform(ref Byte[] bytes, String key)
+        public static void Perform(ref byte[] bytes, byte[] key)
         {
-            Perform(ref bytes, Encoding.ASCII.GetBytes(SHA.Encode(key)));
-        }
-
-        public static void Perform(ref Byte[] bytes, Byte[] key)
-        {
-            Byte[] s = new Byte[256];
-            Byte[] k = new Byte[256];
-            Byte temp;
+            byte[] s = new byte[256];
+            byte[] k = new byte[256];
+            byte temp;
             int i, j;
 
             for (i = 0; i < 256; i++)
             {
-                s[i] = (Byte)i;
+                s[i] = (byte)i;
                 k[i] = key[i % key.GetLength(0)];
             }
 
