@@ -328,7 +328,7 @@
             // columnHeader4
             // 
             this.columnHeader4.Text = "File Size";
-            this.columnHeader4.Width = 67;
+            this.columnHeader4.Width = 76;
             // 
             // columnHeader7
             // 
@@ -343,7 +343,7 @@
             // columnHeader8
             // 
             this.columnHeader8.Text = "Progress";
-            this.columnHeader8.Width = 159;
+            this.columnHeader8.Width = 151;
             // 
             // lstFiles
             // 

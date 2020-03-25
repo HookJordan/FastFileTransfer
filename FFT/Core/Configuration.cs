@@ -1,6 +1,5 @@
 ﻿using FFT.Core.Compression;
 using FFT.Core.Encryption;
-using System;
 using System.IO;
 
 namespace FFT.Core

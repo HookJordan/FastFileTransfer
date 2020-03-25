@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace FFT.Core.Compression
+﻿namespace FFT.Core.Compression
 {
     public enum CompressionAlgorithm
     {
