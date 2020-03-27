@@ -1,7 +1,15 @@
-﻿namespace FFT.Core.Encryption
+﻿using System.Text;
+
+namespace FFT.Core.Encryption
 {
     class RC4
     {
+
+        public static void Perform(ref byte[] bytes, string key)
+        {
+            Perform(ref bytes, Encoding.ASCII.GetBytes(SHA.Encode(key)));
+        }
+
         public static void Perform(ref byte[] bytes, byte[] key)
         {
             byte[] s = new byte[256];
