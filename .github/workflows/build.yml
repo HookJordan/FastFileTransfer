@@ -1,0 +1,15 @@
+name: BuildDotNet
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: windows-latest
+   steps:
+   - uses: actions/checkout@v1
+     name: Checkout Code
+   - uses:  warrenbuckley/Setup-MSBuild@v1
+     name: Setup MS Build Path
+   - name: Build
+      run: msbuild FFT.sln /p:Configuration=Release
+   
