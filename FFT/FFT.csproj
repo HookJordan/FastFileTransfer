@@ -91,6 +91,7 @@
     <Compile Include="Core\Networking\Packet.cs" />
     <Compile Include="Core\Networking\Client.cs" />
     <Compile Include="Core\Networking\Server.cs" />
+    <Compile Include="Core\Networking\Updater.cs" />
     <Compile Include="Core\UI\FancyListViewSort.cs" />
     <Compile Include="Core\UI\FancyListView.cs">
       <SubType>Component</SubType>

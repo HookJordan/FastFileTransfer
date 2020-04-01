@@ -39,6 +39,9 @@ namespace FFT
 
             // Start waiting for incoming connections
             this.startServer();
+
+            // Check for updates on startup
+            UpdateCheck();
         }
 
         private void startServer()
@@ -255,6 +258,40 @@ namespace FFT
                     // Update Display of other settings
                     this.UpdateStatusStrip();
                 }
+            }
+        }
+
+        private void checkForUpdatesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            UpdateCheck();
+        }
+
+        private void UpdateCheck()
+        {
+            try
+            {
+                var update = Updater.CheckForUpdates(Program.BUILD_VERSION);
+
+                int numericVersion = int.Parse(Program.BUILD_VERSION.Replace(".", ""));
+                int numericUpdate = int.Parse(update.Version.Replace(".", ""));
+
+                if (numericUpdate > numericVersion)
+                {
+                    if (MessageBox.Show($"A newer version of FFT has been found. Would you like to download version: {update.Version}?", "Update Found", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                    {
+                        // TODO: This could be improved in the future to actually replace itself with the updated version
+                        // Open the users browser to complete the download
+                        System.Diagnostics.Process.Start(update.Link);
+
+                        // Close application
+                        Environment.Exit(0);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("Unable to fetch updates at this time. Please try again later!", "Error Checking For Updates", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Console.WriteLine(e.Message);
             }
         }
     }
