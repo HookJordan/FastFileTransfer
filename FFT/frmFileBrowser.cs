@@ -50,6 +50,7 @@ namespace FFT
                 {
                     // Stop handling packets
                     this.client.PacketReceived -= Client_PacketReceived;
+                    this.client.Disconnected -= Client_Disconnected;
 
                     // Close all file streams
                     transfers.CancelAllActiveTransfers();
@@ -94,6 +95,7 @@ namespace FFT
             // Begin Handling incoming packets
             this.client.PacketReceived += Client_PacketReceived;
             this.client.ClientReady += Client_ClientReady;
+            this.client.Disconnected += Client_Disconnected;
 
             // Set Listview to drives view
             this.setDriveColumns(true);
@@ -102,6 +104,15 @@ namespace FFT
             lstIcons.Images.Add(IconReader.GetFileIcon("", IconReader.IconSize.Small, false));
             lstIcons.Images.Add(IconReader.GetFileIcon("dummy", IconReader.IconSize.Small, false));
             lstIcons.Images.Add(IconReader.GetFolderIcon(IconReader.IconSize.Small, IconReader.FolderType.Open));            
+        }
+
+        private void Client_Disconnected(Client client)
+        {
+            Invoke((MethodInvoker)delegate {
+                lstFiles.Enabled = false;
+                MessageBox.Show("The remote sessions has ended. Please reconnect to continue.", "Remote Session Closed", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                this.Close();
+            });
         }
 
         private void Client_ClientReady(Client client)

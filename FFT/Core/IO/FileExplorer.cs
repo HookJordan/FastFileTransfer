@@ -8,12 +8,18 @@ namespace FFT.Core.IO
 {
     class FileExplorer
     {
+        public static Logger Log;
+
         static readonly TransferManager tm = new TransferManager();
-        
         public static void HandlePacket(Client client, Packet packet)
         {
             try
             {
+                if (Log == null || Log.isDisposed)
+                {
+                    Log = new Logger(client);
+                }
+
                 switch (packet.PacketHeader)
                 {
                     case PacketHeader.GetDrives:
@@ -54,6 +60,7 @@ namespace FFT.Core.IO
                         break;
                     case PacketHeader.GoodBye:
                         tm.CancelAllActiveTransfers();
+                        Log?.Dispose();
                         break;
                     default:
                         break;
@@ -79,7 +86,7 @@ namespace FFT.Core.IO
                 {
                     string src = br.ReadString();
                     string dst = br.ReadString();
-
+                    Log?.Info($"Moved File: {src} -> {dst}");
                     File.Move(src, dst);
                 }
             }
@@ -98,7 +105,7 @@ namespace FFT.Core.IO
                 {
                     string src = br.ReadString();
                     string dst = br.ReadString();
-
+                    Log?.Info($"Moved Directory: {src} -> {dst}");
                     Directory.Move(src, dst);
                 }
             }
@@ -106,6 +113,7 @@ namespace FFT.Core.IO
 
         private static void CreateDirectory(string path)
         {
+            Log?.Info($"Created Directory: {path}");
             Directory.CreateDirectory(path);
         }
 
@@ -113,12 +121,14 @@ namespace FFT.Core.IO
         {
             if (Directory.Exists(path))
             {
+                Log?.Info("$Deleted Directory: {path}");
                 Directory.Delete(path, true);
             }
         }
 
         private static void SendException(Client c, Exception e)
         {
+            Log?.Error(e.Message);
             c.Send(Packet.Create(PacketHeader.FileBrowserException, e.Message));
         }
           
@@ -153,6 +163,7 @@ namespace FFT.Core.IO
                     }
                 }
 
+                Log?.Info("Listing available drives...");
                 client.Send(Packet.Create(PacketHeader.DrivesResponse, ms.ToArray()));
             }
         }
@@ -166,7 +177,7 @@ namespace FFT.Core.IO
             }
             else
             {
-                Console.WriteLine($"Getting {dir}");
+                Log?.Info($"Accessing Directory: {dir}");
 
                 using (MemoryStream ms = new MemoryStream())
                 {
@@ -176,9 +187,10 @@ namespace FFT.Core.IO
                         if (root.Length == 2)
                             root += "\\";
 
-                        var directories = Directory.GetDirectories(dir);
-                        var files = Directory.GetFiles(dir);
+                        var directories = Directory.EnumerateDirectories(dir);
+                        var files = Directory.EnumerateFiles(dir);
 
+                        // This will serve as a place holder for the user to go "up" a directory
                         List<string[]> temp = new List<string[]>();
                         temp.Add(new string[]
                         {
@@ -188,6 +200,10 @@ namespace FFT.Core.IO
                             " ",
                             " "
                         });
+
+                        // TODO: This can be refactored down to 2 loops instead of 4
+                        // We can iterate the directory and write to the memory stream
+                        // at the same time.
                         foreach (var d in directories)
                         {
                             try 

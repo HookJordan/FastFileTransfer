@@ -2,9 +2,6 @@
 using System;
 using System.IO;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FFT.Core.IO
 {
@@ -82,6 +79,8 @@ namespace FFT.Core.IO
 
                     // START THE UPLOADING NOW 
                     NextChunk(c, t.TransferId, t.GetChunk());
+
+                    FileExplorer.Log?.Info($"Sending file: {localPath}");
                 }
             }
         }
@@ -101,6 +100,8 @@ namespace FFT.Core.IO
                     FileTransfers.Add(t.TransferId, t);
 
                     NextChunk(c, t.TransferId, new byte[] { 0 });
+
+                    FileExplorer.Log?.Info($"Receiving file: {localPath}");
                 }
             }
         }

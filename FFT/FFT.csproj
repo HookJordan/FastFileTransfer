@@ -19,7 +19,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -47,6 +47,7 @@
     <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -87,9 +88,11 @@
     <Compile Include="Core\Encryption\XOR.cs" />
     <Compile Include="Core\IO\FileExplorer.cs" />
     <Compile Include="Core\IO\FileTransfer.cs" />
+    <Compile Include="Core\IO\Logger.cs" />
     <Compile Include="Core\IO\TransferManager.cs" />
     <Compile Include="Core\Networking\Packet.cs" />
     <Compile Include="Core\Networking\Client.cs" />
+    <Compile Include="Core\Networking\PacketHeader.cs" />
     <Compile Include="Core\Networking\Server.cs" />
     <Compile Include="Core\Networking\Updater.cs" />
     <Compile Include="Core\UI\FancyListViewSort.cs" />
@@ -103,6 +106,12 @@
     </Compile>
     <Compile Include="frmFileBrowser.Designer.cs">
       <DependentUpon>frmFileBrowser.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmInfo.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmInfo.Designer.cs">
+      <DependentUpon>frmInfo.cs</DependentUpon>
     </Compile>
     <Compile Include="frmMain.cs">
       <SubType>Form</SubType>
@@ -120,6 +129,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="frmFileBrowser.resx">
       <DependentUpon>frmFileBrowser.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmInfo.resx">
+      <DependentUpon>frmInfo.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmMain.resx">
       <DependentUpon>frmMain.cs</DependentUpon>

@@ -115,34 +115,10 @@ namespace FFT
 
         private void UpdateStatusStrip()
         {
-            //if (client != null && client.Connected)
-            //{
-            //    lblCompressionMode.Text = client.compressionProvider.algorithm.ToString();
-            //    lblEncryption.Text = client.cryptoProvider.algorithm.ToString();
-            //}
-            //else
-            {
-                lblCompressionMode.Text = configuration.compressionAlgorithm.ToString();
-                lblEncryption.Text = configuration.cryptoAlgorithm.ToString();
-            }
-
-            if (configuration.compressionAlgorithm == CompressionAlgorithm.Disabled)
-            {
-                lblCompressionMode.ForeColor = Color.Red;
-            }
-            else
-            {
-                lblCompressionMode.ForeColor = Color.Green;
-            }
-
-            if (configuration.cryptoAlgorithm == CryptoAlgorithm.Disabled)
-            {
-                lblEncryption.ForeColor = Color.Red;
-            }
-            else
-            {
-                lblEncryption.ForeColor = Color.Green;
-            }
+            lblCompressionMode.Text = configuration.compressionAlgorithm.ToString();
+            lblEncryption.Text = configuration.cryptoAlgorithm.ToString();
+            lblCompressionMode.ForeColor = (configuration.compressionAlgorithm == CompressionAlgorithm.Disabled) ? Color.Red : Color.Green;
+            lblEncryption.ForeColor = (configuration.cryptoAlgorithm == CryptoAlgorithm.Disabled) ? Color.Red : Color.Green;
         }
 
         private void refreshIncomePass()
@@ -202,7 +178,6 @@ namespace FFT
                 MessageBox.Show(err.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
         private void Fb_FormClosing(object sender, FormClosingEventArgs e)
         {
             btnConnect.Enabled = true;
@@ -216,7 +191,6 @@ namespace FFT
             if (p.PacketHeader != PacketHeader.FileChunk)
             {
                 Console.WriteLine($"Received packet {p.PacketHeader} from {client.IP}:{client.Port}");
-
                 if (p.PacketHeader == PacketHeader.GoodBye)
                 {
                     client.TriggerDisconnect();
@@ -273,15 +247,15 @@ namespace FFT
                 var update = Updater.CheckForUpdates(Program.BUILD_VERSION);
 
                 int numericVersion = int.Parse(Program.BUILD_VERSION.Replace(".", ""));
-                int numericUpdate = int.Parse(update.Version.Replace(".", ""));
+                int numericUpdate = int.Parse(update.version.Replace(".", ""));
 
                 if (numericUpdate > numericVersion)
                 {
-                    if (MessageBox.Show($"A newer version of FFT has been found. Would you like to download version: {update.Version}?", "Update Found", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                    if (MessageBox.Show($"A newer version of FFT has been found. Would you like to download version: {update.version}?", "Update Found", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                     {
                         // TODO: This could be improved in the future to actually replace itself with the updated version
                         // Open the users browser to complete the download
-                        System.Diagnostics.Process.Start(update.Link);
+                        System.Diagnostics.Process.Start("https://jordanhook.com/" + update.package);
 
                         // Close application
                         Environment.Exit(0);
@@ -289,7 +263,7 @@ namespace FFT
                 }
             }
             catch (Exception e)
-            {
+            { 
                 MessageBox.Show("Unable to fetch updates at this time. Please try again later!", "Error Checking For Updates", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 Console.WriteLine(e.Message);
             }

@@ -1,5 +1,6 @@
 ﻿using FFT.Core.Compression;
 using FFT.Core.Encryption;
+using FFT.Core.IO;
 using System;
 using System.IO;
 using System.Net;
@@ -71,6 +72,9 @@ namespace FFT.Core.Networking
 
                 if (this.socket.Connected)
                 {
+                    // TODO: Instead of rc4 encoding the password... hash the password and compare hashes 
+                    // Use unhashed version of password for actual encryption
+
                     // Confirm passwords using RC4
                     byte[] payload = Encoding.ASCII.GetBytes(this.encodedPassword);
                     Encryption.RC4.Perform(ref payload, password);
@@ -155,7 +159,6 @@ namespace FFT.Core.Networking
                     }
 
                     // Decrypt the packet
-                    // Encryption.RC4.Perform(ref buffer, this.Password);
                     buffer = cryptoProvider.Decrypt(buffer);
 
                     // PASS THE PACKET TO A HANDLER?
@@ -178,7 +181,6 @@ namespace FFT.Core.Networking
         {
             try
             {
-                // Encryption.RC4.Perform(ref payload, this.Password);
                 payload = cryptoProvider.Encrypt(payload);
 
                 this.socket.Send(BitConverter.GetBytes(payload.Length));
@@ -201,10 +203,8 @@ namespace FFT.Core.Networking
             {
                 this.socket.Close();
             }
-            else
-            {
-                this.socket.Dispose();
-            }
+
+            this.socket.Dispose();
         }
 
         public void TriggerDisconnect()
