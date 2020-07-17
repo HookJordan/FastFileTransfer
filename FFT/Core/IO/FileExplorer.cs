@@ -8,6 +8,7 @@ namespace FFT.Core.IO
 {
     class FileExplorer
     {
+        public static Configuration Config;
         public static Logger Log;
 
         static readonly TransferManager tm = new TransferManager();
@@ -26,6 +27,7 @@ namespace FFT.Core.IO
                         GetDrivesPayload(client);
                         break;
                     case PacketHeader.GetDirectory:
+                        IsProtected(packet.ToString()); // Permissions Check (Protected Directories)
                         GetDirectory(client, packet.ToString());
                         break;
                     // THESE ARE INVERTED... 
@@ -41,18 +43,23 @@ namespace FFT.Core.IO
                         tm.HandleFileChunk(client, packet);
                         break;
                     case PacketHeader.DirectoryDelete:
+                        IsProtected(packet.ToString()); // Permissions Check (Protected Directories)
                         DeleteDirectory(packet.ToString());
                         break;
                     case PacketHeader.DirectoryCreate:
+                        IsProtected(packet.ToString()); // Permissions Check (Protected Directories)
                         CreateDirectory(packet.ToString());
                         break;
                     case PacketHeader.DirectoryMove:
+                        IsProtected(packet.ToString()); // Permissions Check (Protected Directories)
                         MoveDirectory(packet);
                         break;
                     case PacketHeader.FileMove:
+                        IsProtected(packet.ToString()); // Permissions Check (Protected Directories)
                         MoveFile(packet);
                         break;
                     case PacketHeader.FileDelete:
+                        IsProtected(packet.ToString()); // Permissions Check (Protected Directories)
                         DeleteFile(packet.ToString());
                         break;
                     case PacketHeader.CancelTransfer:
@@ -209,11 +216,12 @@ namespace FFT.Core.IO
                             try 
                             {
                                 DirectoryInfo di = new DirectoryInfo(d);
+                                var isProt = IsProtected(di.FullName, false) ? "*" : "";
                                 temp.Add(new string[]
                                 {
-                                    di.Name,
+                                    di.Name+ isProt,
                                     di.FullName,
-                                    di.GetFiles().Length + " FILES",
+                                    di.GetFiles().Length + " FILES" ,
                                     di.CreationTime.ToShortDateString(),
                                     di.LastAccessTime.ToString("dd-mm-yy HH:ss")
                                 });
@@ -270,6 +278,18 @@ namespace FFT.Core.IO
                     client.Send(Packet.Create(PacketHeader.DirectoryResponse, ms.ToArray()));
                 }
             }
+        }
+
+        public static bool IsProtected(string dir, bool throwException = true)
+        {
+            var match = Config.ProtectedFolders.FirstOrDefault(d => dir.ToLower().StartsWith(d.ToLower()));
+
+            if (match != null && throwException)
+            {
+                throw new Exception($"Access denied! '{dir}' is a protected directory.");
+            }
+
+            return match != null;
         }
 
         public static string GetSize(double size)

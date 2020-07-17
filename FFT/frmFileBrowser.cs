@@ -184,6 +184,12 @@ namespace FFT
                                     item.ImageIndex = 3;
                                     item.Tag = "folder";
 
+                                    if (item.SubItems[0].Text.Contains("*"))
+                                    {
+                                        item.SubItems[0].Text = item.SubItems[0].Text.Replace("*", "");
+                                        item.ForeColor = Color.Red;
+                                    }
+
                                     lstFiles.Items.Add(item);
                                 }
 
@@ -237,6 +243,10 @@ namespace FFT
                                 client.Send(Packet.Create(PacketHeader.GetDirectory, currentPath));
                                 break;
                             case PacketHeader.FileBrowserException:
+                                if (p.ToString().StartsWith("Access denied!"))
+                                {
+                                    txtQuick.Text = lstFiles.Items[0].SubItems[1].Text;
+                                }
                                 MessageBox.Show(p.ToString(), "An error occured", MessageBoxButtons.OK, MessageBoxIcon.Error);
                                 lstFiles.Enabled = true;
                                 break;

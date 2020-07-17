@@ -109,7 +109,7 @@ namespace FFT
             // todo: Load user configuration (load user defined port and defined password is exists)
             this.configuration = Configuration.FromFile("config.data");
             this.txtIncomePort.Text = configuration.Port.ToString();
-
+            FileExplorer.Config = this.configuration;
             UpdateStatusStrip();   
         }
 
@@ -231,6 +231,7 @@ namespace FFT
 
                     // Update Display of other settings
                     this.UpdateStatusStrip();
+                    FileExplorer.Config = configuration;
                 }
             }
         }
