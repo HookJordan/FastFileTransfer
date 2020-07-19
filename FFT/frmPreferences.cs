@@ -63,6 +63,8 @@ namespace FFT
 
             // Load Protected folders
             this.lstProtected.Items.AddRange(configuration.ProtectedFolders.ToArray());
+
+            cbDebug.Checked = configuration.DebugMode;
         }
 
         private void btnCancel_Click(object sender, EventArgs e)
@@ -120,6 +122,8 @@ namespace FFT
             {
                 configuration.ProtectedFolders.Add(item.ToString());
             }
+
+            configuration.DebugMode = cbDebug.Checked;
 
 
             this.DialogResult = DialogResult.OK;

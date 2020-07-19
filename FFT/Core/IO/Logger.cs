@@ -33,7 +33,7 @@ namespace FFT.Core.IO
             // This could be changed to use the normal UI thread as well in the future.
             var uiThread = new Thread(() => 
             {
-                frmInfo = new frmInfo(client);
+                frmInfo = new frmInfo(client, FileName);
                 frmInfo.ShowDialog();
             });
             uiThread.IsBackground = false;
@@ -51,18 +51,26 @@ namespace FFT.Core.IO
             WriteLine($"[ERROR] {msg}");
         }
 
+        public void Debug(string msg)
+        {
+            WriteLine($"[DEBUG] {msg}");
+        }
+
         private void WriteLine(string msg)
         {
             var log = $"{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")} {msg}";
-            streamWriter.WriteLine(log);
+            streamWriter?.WriteLine(log);
             frmInfo?.WriteText(log);
         }
 
         public void Dispose()
         {
-            isDisposed = true;
-            Info("End of connection");
-            streamWriter.Dispose();
+            if (!isDisposed)
+            {
+                isDisposed = true;
+                Info("End of connection");
+                streamWriter.Dispose();
+            }
         }
     }
 }

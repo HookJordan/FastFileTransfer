@@ -15,8 +15,11 @@ namespace FFT.Core
         public CompressionAlgorithm compressionAlgorithm;
         public CryptoAlgorithm cryptoAlgorithm;
 
+        // Added in 1.1.0
         public List<string> ProtectedFolders { get; set; }
 
+        // Added in 1.2.0
+        public bool DebugMode { get; set; }
         private Configuration()
         {
             // Defaults
@@ -30,6 +33,8 @@ namespace FFT.Core
             {
                 Environment.GetFolderPath(Environment.SpecialFolder.Windows)
             });
+
+            this.DebugMode = false;
         }
 
         public void Save(string path)
@@ -48,6 +53,8 @@ namespace FFT.Core
                     {
                         bw.Write(dir);
                     }
+
+                    bw.Write(DebugMode);
                 }
             }
         }
@@ -82,6 +89,8 @@ namespace FFT.Core
                             {
                                 config.ProtectedFolders.Add(br.ReadString());
                             }
+
+                            config.DebugMode = br.ReadBoolean();
 
                         }
                         catch (Exception e)

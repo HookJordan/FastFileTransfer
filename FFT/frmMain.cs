@@ -41,7 +41,7 @@ namespace FFT
             this.startServer();
 
             // Check for updates on startup
-            UpdateCheck();
+            UpdateCheck(true);
         }
 
         private void startServer()
@@ -241,7 +241,7 @@ namespace FFT
             UpdateCheck();
         }
 
-        private void UpdateCheck()
+        private void UpdateCheck(bool systemCheck = false)
         {
             try
             {
@@ -252,7 +252,7 @@ namespace FFT
 
                 if (numericUpdate > numericVersion)
                 {
-                    if (MessageBox.Show($"A newer version of FFT has been found. Would you like to download version: {update.version}?", "Update Found", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                    if (MessageBox.Show($"A newer version of FastFileTransfer has been found. Would you like to download version: {update.version}?", "Update Found", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                     {
                         // TODO: This could be improved in the future to actually replace itself with the updated version
                         // Open the users browser to complete the download
@@ -260,6 +260,14 @@ namespace FFT
 
                         // Close application
                         Environment.Exit(0);
+                    }
+                }
+                else
+                {
+                    // Alert user even when no update is found
+                    if (!systemCheck)
+                    {
+                        MessageBox.Show($"FastFileTransfer is up to date.", "Checking for updates", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                 }
             }

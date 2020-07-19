@@ -58,6 +58,7 @@
             this.mnuForbidden = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.addToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.removeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.cbDebug = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numPort)).BeginInit();
             this.groupBox5.SuspendLayout();
@@ -272,6 +273,7 @@
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.cbDebug);
             this.tabPage1.Controls.Add(this.groupBox2);
             this.tabPage1.Controls.Add(this.groupBox1);
             this.tabPage1.Location = new System.Drawing.Point(4, 25);
@@ -354,7 +356,7 @@
             this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage3.Size = new System.Drawing.Size(418, 332);
             this.tabPage3.TabIndex = 2;
-            this.tabPage3.Text = "Permissions";
+            this.tabPage3.Text = "Security";
             this.tabPage3.UseVisualStyleBackColor = true;
             // 
             // groupBox3
@@ -400,6 +402,16 @@
             this.removeToolStripMenuItem.Text = "Remove";
             this.removeToolStripMenuItem.Click += new System.EventHandler(this.removeToolStripMenuItem_Click);
             // 
+            // cbDebug
+            // 
+            this.cbDebug.AutoSize = true;
+            this.cbDebug.Location = new System.Drawing.Point(266, 247);
+            this.cbDebug.Name = "cbDebug";
+            this.cbDebug.Size = new System.Drawing.Size(98, 20);
+            this.cbDebug.TabIndex = 15;
+            this.cbDebug.Text = "Debug Mode";
+            this.cbDebug.UseVisualStyleBackColor = true;
+            // 
             // frmPreferences
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 16F);
@@ -426,6 +438,7 @@
             this.groupBox4.PerformLayout();
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
+            this.tabPage1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numBufferSize)).EndInit();
@@ -468,5 +481,6 @@
         private System.Windows.Forms.ContextMenuStrip mnuForbidden;
         private System.Windows.Forms.ToolStripMenuItem addToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem removeToolStripMenuItem;
+        private System.Windows.Forms.CheckBox cbDebug;
     }
 }

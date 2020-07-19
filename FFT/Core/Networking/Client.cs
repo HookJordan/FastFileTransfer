@@ -23,8 +23,11 @@ namespace FFT.Core.Networking
         public CryptoProvider cryptoProvider { get; private set; }
         public int BufferSize { get; private set; }
 
+        public bool InboundConnection { get; private set; } = false;
+
         public Client(Socket socket, string password, CompressionProvider compressionProvider, CryptoProvider cryptoProvider, int bufferSize)
         {
+            this.InboundConnection = true;
             this.compressionProvider = compressionProvider;
             this.cryptoProvider = cryptoProvider;
             this.Password = password;
@@ -194,6 +197,9 @@ namespace FFT.Core.Networking
 
         public void Send(Packet p)
         {
+            if (InboundConnection)
+                FileExplorer.Debug($"Packet Sent: {p.PacketHeader}, Length {p.Payload.Length}");
+
             this.Send(p.ToRawBytes());
         }
 
