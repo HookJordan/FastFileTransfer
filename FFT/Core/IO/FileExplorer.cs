@@ -78,7 +78,7 @@ namespace FFT.Core.IO
                 // Refresh ui after
                 if (packet.PacketHeader >= PacketHeader.DirectoryDelete && packet.PacketHeader <= PacketHeader.FileBrowserException)
                 {
-                    Log.Debug($"Packet Sent: {packet.PacketHeader}, Length {packet.Payload.Length}");
+                    Debug($"Packet Sent: {packet.PacketHeader}, Length {packet.Payload.Length}");
                     client.Send(packet);
                 }
             }
@@ -322,7 +322,6 @@ namespace FFT.Core.IO
 
         public static void Debug(string msg)
         {
-
             // Change this check to be in the logger class...
             if (Config.DebugMode)
             {

@@ -111,7 +111,7 @@ namespace FFT
             Invoke((MethodInvoker)delegate {
                 lstFiles.Enabled = false;
                 MessageBox.Show("The remote sessions has ended. Please reconnect to continue.", "Remote Session Closed", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                this.Close();
+                this?.Close();
             });
         }
 
