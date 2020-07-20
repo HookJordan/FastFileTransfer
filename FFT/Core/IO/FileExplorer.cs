@@ -132,7 +132,7 @@ namespace FFT.Core.IO
         {
             if (Directory.Exists(path))
             {
-                Log?.Info("$Deleted Directory: {path}");
+                Log?.Info($"Deleted Directory: {path}");
                 Directory.Delete(path, true);
             }
         }
