@@ -23,7 +23,7 @@ namespace FFT
         public Client client { get; set; }
         public frmFileBrowser(Client client)
         {
-            this.client = client;
+            this.client = client;           
 
             InitializeComponent();
 
@@ -92,39 +92,35 @@ namespace FFT
         {
             this.Text = $"File Browser - {client.IP}";
 
-            // Begin Handling incoming packets
-            this.client.PacketReceived += Client_PacketReceived;
-            this.client.ClientReady += Client_ClientReady;
-            this.client.Disconnected += Client_Disconnected;
-
             // Set Listview to drives view
             this.setDriveColumns(true);
 
             // Setup listview icons
             lstIcons.Images.Add(IconReader.GetFileIcon("", IconReader.IconSize.Small, false));
             lstIcons.Images.Add(IconReader.GetFileIcon("dummy", IconReader.IconSize.Small, false));
-            lstIcons.Images.Add(IconReader.GetFolderIcon(IconReader.IconSize.Small, IconReader.FolderType.Open));            
+            lstIcons.Images.Add(IconReader.GetFolderIcon(IconReader.IconSize.Small, IconReader.FolderType.Open));
+
+            // Begin Handling incoming packets
+            this.client.PacketReceived += Client_PacketReceived;
+            this.client.Disconnected += Client_Disconnected;
+
+            // Update connnection information
+            UpdateStatusStrip();
+
+            // Load drives
+            client.Send(Packet.Create(PacketHeader.GetDrives, "NOW"));
         }
 
         private void Client_Disconnected(Client client)
         {
             Invoke((MethodInvoker)delegate {
-                lstFiles.Enabled = false;
-                MessageBox.Show("The remote sessions has ended. Please reconnect to continue.", "Remote Session Closed", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                this.Close();
+                if (!this.IsDisposed)
+                {
+                    lstFiles.Enabled = false;
+                    MessageBox.Show("The remote sessions has ended. Please reconnect to continue.", "Remote Session Closed", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    this?.Close();
+                }
             });
-        }
-
-        private void Client_ClientReady(Client client)
-        {
-            Invoke((MethodInvoker)delegate
-            {
-                // Update connnection information
-                UpdateStatusStrip();
-            });
-
-            // Load drives
-            client.Send(Packet.Create(PacketHeader.GetDrives, "NOW"));
         }
 
         private void Client_PacketReceived(Client client, byte[] payload)
@@ -184,6 +180,12 @@ namespace FFT
                                     item.ImageIndex = 3;
                                     item.Tag = "folder";
 
+                                    if (item.SubItems[0].Text.Contains("*"))
+                                    {
+                                        item.SubItems[0].Text = item.SubItems[0].Text.Replace("*", "");
+                                        item.ForeColor = Color.Red;
+                                    }
+
                                     lstFiles.Items.Add(item);
                                 }
 
@@ -237,6 +239,10 @@ namespace FFT
                                 client.Send(Packet.Create(PacketHeader.GetDirectory, currentPath));
                                 break;
                             case PacketHeader.FileBrowserException:
+                                if (p.ToString().StartsWith("Access denied!"))
+                                {
+                                    txtQuick.Text = lstFiles.Items[0].SubItems[1].Text;
+                                }
                                 MessageBox.Show(p.ToString(), "An error occured", MessageBoxButtons.OK, MessageBoxIcon.Error);
                                 lstFiles.Enabled = true;
                                 break;

@@ -8,6 +8,7 @@ namespace FFT.Core.IO
 {
     class FileExplorer
     {
+        public static Configuration Config;
         public static Logger Log;
 
         static readonly TransferManager tm = new TransferManager();
@@ -20,13 +21,16 @@ namespace FFT.Core.IO
                     Log = new Logger(client);
                 }
 
+                Debug($"Packet Received: {packet.PacketHeader}, Length {packet.Payload.Length}");
+
                 switch (packet.PacketHeader)
                 {
                     case PacketHeader.GetDrives:
                         GetDrivesPayload(client);
                         break;
                     case PacketHeader.GetDirectory:
-                        GetDirectory(client, packet.ToString());
+                        IsProtected(packet.ToString()); // Permissions Check (Protected Directories)
+                        GetDirectory(client, packet.ToString()); 
                         break;
                     // THESE ARE INVERTED... 
                     // A Download from the UI is an upload here
@@ -41,18 +45,23 @@ namespace FFT.Core.IO
                         tm.HandleFileChunk(client, packet);
                         break;
                     case PacketHeader.DirectoryDelete:
+                        IsProtected(packet.ToString()); // Permissions Check (Protected Directories)
                         DeleteDirectory(packet.ToString());
                         break;
                     case PacketHeader.DirectoryCreate:
+                        IsProtected(packet.ToString()); // Permissions Check (Protected Directories)
                         CreateDirectory(packet.ToString());
                         break;
                     case PacketHeader.DirectoryMove:
+                        IsProtected(packet.ToString()); // Permissions Check (Protected Directories)
                         MoveDirectory(packet);
                         break;
                     case PacketHeader.FileMove:
+                        IsProtected(packet.ToString()); // Permissions Check (Protected Directories)
                         MoveFile(packet);
                         break;
                     case PacketHeader.FileDelete:
+                        IsProtected(packet.ToString()); // Permissions Check (Protected Directories)
                         DeleteFile(packet.ToString());
                         break;
                     case PacketHeader.CancelTransfer:
@@ -69,6 +78,7 @@ namespace FFT.Core.IO
                 // Refresh ui after
                 if (packet.PacketHeader >= PacketHeader.DirectoryDelete && packet.PacketHeader <= PacketHeader.FileBrowserException)
                 {
+                    Debug($"Packet Sent: {packet.PacketHeader}, Length {packet.Payload.Length}");
                     client.Send(packet);
                 }
             }
@@ -94,6 +104,7 @@ namespace FFT.Core.IO
 
         private static void DeleteFile(string path)
         {
+            Log?.Info($"Deleted File: {path}");
             File.Delete(path);
         }
 
@@ -121,7 +132,7 @@ namespace FFT.Core.IO
         {
             if (Directory.Exists(path))
             {
-                Log?.Info("$Deleted Directory: {path}");
+                Log?.Info($"Deleted Directory: {path}");
                 Directory.Delete(path, true);
             }
         }
@@ -209,17 +220,19 @@ namespace FFT.Core.IO
                             try 
                             {
                                 DirectoryInfo di = new DirectoryInfo(d);
+                                var isProt = IsProtected(di.FullName, false) ? "*" : "";
                                 temp.Add(new string[]
                                 {
-                                    di.Name,
+                                    di.Name+ isProt,
                                     di.FullName,
-                                    di.GetFiles().Length + " FILES",
-                                    di.CreationTime.ToShortDateString(),
-                                    di.LastAccessTime.ToString("dd-mm-yy HH:ss")
+                                    di.GetFiles().Length + " FILES" ,
+                                    di.CreationTime.ToString("dd/MM/yyyy HH:ss"),
+                                    di.LastAccessTime.ToString("dd/MM/yyyy HH:ss")
                                 });
                             }
                             catch (Exception e)
                             {
+                                Debug(e.Message);
                                 Console.WriteLine(e.Message);
                             }
                         }
@@ -246,13 +259,14 @@ namespace FFT.Core.IO
                                     fi.Name,
                                     fi.FullName,
                                     GetSize((double)fi.Length),
-                                    fi.CreationTime.ToShortDateString(),
-                                    fi.LastAccessTime.ToString("dd-mm-yy HH:ss"),
+                                    fi.CreationTime.ToString("dd/MM/yyyy HH:ss"),
+                                    fi.LastAccessTime.ToString("dd/MM/yyyy HH:ss"),
                                     fi.Length.ToString()
                                 });
                             }
                             catch (Exception e)
                             {
+                                Debug(e.Message);
                                 Console.WriteLine(e.Message);
                             }
                         }
@@ -270,6 +284,18 @@ namespace FFT.Core.IO
                     client.Send(Packet.Create(PacketHeader.DirectoryResponse, ms.ToArray()));
                 }
             }
+        }
+
+        public static bool IsProtected(string dir, bool throwException = true)
+        {
+            var match = Config.ProtectedFolders.FirstOrDefault(d => dir.ToLower().StartsWith(d.ToLower()));
+
+            if (match != null && throwException)
+            {
+                throw new Exception($"Access denied! '{dir}' is a protected directory.");
+            }
+
+            return match != null;
         }
 
         public static string GetSize(double size)
@@ -292,6 +318,15 @@ namespace FFT.Core.IO
                 rtn = string.Format("{0:0.00} GB", size);
             }
             return rtn;
+        }
+
+        public static void Debug(string msg)
+        {
+            // Change this check to be in the logger class...
+            if (Config.DebugMode)
+            {
+                Log?.Debug(msg);
+            }
         }
     }
 }

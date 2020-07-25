@@ -60,6 +60,11 @@ namespace FFT
                     cbBlowFish.Checked = true;
                     break;
             }
+
+            // Load Protected folders
+            this.lstProtected.Items.AddRange(configuration.ProtectedFolders.ToArray());
+
+            cbDebug.Checked = configuration.DebugMode;
         }
 
         private void btnCancel_Click(object sender, EventArgs e)
@@ -112,8 +117,40 @@ namespace FFT
                 configuration.cryptoAlgorithm = CryptoAlgorithm.Blowfish;
             }
 
+            configuration.ProtectedFolders = new System.Collections.Generic.List<string>();
+            foreach (var item in lstProtected.Items)
+            {
+                configuration.ProtectedFolders.Add(item.ToString());
+            }
+
+            configuration.DebugMode = cbDebug.Checked;
+
 
             this.DialogResult = DialogResult.OK;
+        }
+
+        private void addToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (FolderBrowserDialog fbd = new FolderBrowserDialog())
+            {
+                if (fbd.ShowDialog() == DialogResult.OK)
+                {
+                    lstProtected.Items.Add(fbd.SelectedPath);
+                }
+            }
+        }
+
+        private void removeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (lstProtected.SelectedItem != null)
+            {
+                var dir = (string)lstProtected.SelectedItem;
+
+                if (MessageBox.Show($"By removing this protected folder remotely connected users will be able to access and modify it's contents. Are you sure you wish to remove:\n'{dir}'?", "Remove Forbidden Folder", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                {
+                    lstProtected.Items.Remove(lstProtected.SelectedItem);
+                }
+            }
         }
     }
 }

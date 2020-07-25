@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.txtLog = new System.Windows.Forms.TextBox();
+            this.rtxtLog = new System.Windows.Forms.RichTextBox();
             this.SuspendLayout();
             // 
             // txtLog
@@ -38,15 +39,27 @@
             this.txtLog.Multiline = true;
             this.txtLog.Name = "txtLog";
             this.txtLog.ReadOnly = true;
-            this.txtLog.ScrollBars = System.Windows.Forms.ScrollBars.Horizontal;
+            this.txtLog.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.txtLog.Size = new System.Drawing.Size(749, 307);
             this.txtLog.TabIndex = 0;
+            // 
+            // rtxtLog
+            // 
+            this.rtxtLog.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.rtxtLog.Location = new System.Drawing.Point(0, 0);
+            this.rtxtLog.Name = "rtxtLog";
+            this.rtxtLog.ReadOnly = true;
+            this.rtxtLog.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
+            this.rtxtLog.Size = new System.Drawing.Size(749, 307);
+            this.rtxtLog.TabIndex = 1;
+            this.rtxtLog.Text = "";
             // 
             // frmInfo
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(749, 307);
+            this.Controls.Add(this.rtxtLog);
             this.Controls.Add(this.txtLog);
             this.Font = new System.Drawing.Font("Tahoma", 9.75F);
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
@@ -62,5 +75,6 @@
         #endregion
 
         private System.Windows.Forms.TextBox txtLog;
+        private System.Windows.Forms.RichTextBox rtxtLog;
     }
 }

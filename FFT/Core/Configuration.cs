@@ -1,6 +1,9 @@
 ﻿using FFT.Core.Compression;
 using FFT.Core.Encryption;
+using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Runtime.CompilerServices;
 
 namespace FFT.Core
 {
@@ -12,6 +15,11 @@ namespace FFT.Core
         public CompressionAlgorithm compressionAlgorithm;
         public CryptoAlgorithm cryptoAlgorithm;
 
+        // Added in 1.1.0
+        public List<string> ProtectedFolders { get; set; }
+
+        // Added in 1.2.0
+        public bool DebugMode { get; set; }
         private Configuration()
         {
             // Defaults
@@ -19,6 +27,14 @@ namespace FFT.Core
             this.BufferSize = 256;
             this.compressionAlgorithm = CompressionAlgorithm.GZIP;
             this.cryptoAlgorithm = CryptoAlgorithm.RC4;
+
+            this.ProtectedFolders = new List<string>();
+            this.ProtectedFolders.AddRange(new string[]
+            {
+                Environment.GetFolderPath(Environment.SpecialFolder.Windows)
+            });
+
+            this.DebugMode = false;
         }
 
         public void Save(string path)
@@ -31,6 +47,14 @@ namespace FFT.Core
                     bw.Write(BufferSize);
                     bw.Write((int)compressionAlgorithm);
                     bw.Write((int)cryptoAlgorithm);
+
+                    bw.Write(ProtectedFolders.Count);
+                    foreach (string dir in ProtectedFolders)
+                    {
+                        bw.Write(dir);
+                    }
+
+                    bw.Write(DebugMode);
                 }
             }
         }
@@ -54,6 +78,25 @@ namespace FFT.Core
                         config.BufferSize = br.ReadInt32();
                         config.compressionAlgorithm = (CompressionAlgorithm)br.ReadInt32();
                         config.cryptoAlgorithm = (CryptoAlgorithm)br.ReadInt32();
+
+                        try
+                        {
+                            // This will cause errors until the config files have been updated...
+                            int pfCount = br.ReadInt32();
+                            config.ProtectedFolders = new List<string>();
+
+                            for (int i = 0; i < pfCount; i++)
+                            {
+                                config.ProtectedFolders.Add(br.ReadString());
+                            }
+
+                            config.DebugMode = br.ReadBoolean();
+
+                        }
+                        catch (Exception e)
+                        {
+                            Console.WriteLine(e.Message);
+                        }
                     }
                 }
                 return config;

@@ -41,7 +41,7 @@ namespace FFT
             this.startServer();
 
             // Check for updates on startup
-            UpdateCheck();
+            UpdateCheck(true);
         }
 
         private void startServer()
@@ -109,7 +109,7 @@ namespace FFT
             // todo: Load user configuration (load user defined port and defined password is exists)
             this.configuration = Configuration.FromFile("config.data");
             this.txtIncomePort.Text = configuration.Port.ToString();
-
+            FileExplorer.Config = this.configuration;
             UpdateStatusStrip();   
         }
 
@@ -162,15 +162,17 @@ namespace FFT
         {
             try
             {
+                if (txtPassword.Text == string.Empty)
+                    throw new Exception("Password field can not be empty. Please enter a password to continue.");
+
                 this.btnConnect.Enabled = false;
                 this.client = new Client(this.txtIp.Text, (int)this.numPort.Value, this.txtPassword.Text, configuration.BufferSize);
 
-                if (this.client.Connected)
-                {
-                    var fb = new frmFileBrowser(this.client);
-                    fb.FormClosing += Fb_FormClosing;
-                    fb.Show();
-                }
+                // Setup callback for when connection has been established
+                this.client.ClientReady += Client_ClientReady;
+
+                // Begin connection / pairing
+                this.client.Connect();
             }
             catch (Exception err)
             {
@@ -178,6 +180,25 @@ namespace FFT
                 MessageBox.Show(err.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        private void Client_ClientReady(Client client, bool success)
+        {
+            Invoke((MethodInvoker)delegate
+            {
+                if (success)
+                {
+                    var fb = new frmFileBrowser(client);
+                    fb.FormClosing += Fb_FormClosing;
+                    fb.Show();
+                }
+                else
+                {
+                    MessageBox.Show("Unable to connect to server. Please verify your configuration and try again.", "Unable to connect", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    btnConnect.Enabled = true;
+                }
+            });
+        }
+
         private void Fb_FormClosing(object sender, FormClosingEventArgs e)
         {
             btnConnect.Enabled = true;
@@ -231,6 +252,7 @@ namespace FFT
 
                     // Update Display of other settings
                     this.UpdateStatusStrip();
+                    FileExplorer.Config = configuration;
                 }
             }
         }
@@ -240,7 +262,7 @@ namespace FFT
             UpdateCheck();
         }
 
-        private void UpdateCheck()
+        private void UpdateCheck(bool systemCheck = false)
         {
             try
             {
@@ -251,7 +273,7 @@ namespace FFT
 
                 if (numericUpdate > numericVersion)
                 {
-                    if (MessageBox.Show($"A newer version of FFT has been found. Would you like to download version: {update.version}?", "Update Found", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                    if (MessageBox.Show($"A newer version of FastFileTransfer has been found. Would you like to download version: {update.version}?", "Update Found", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                     {
                         // TODO: This could be improved in the future to actually replace itself with the updated version
                         // Open the users browser to complete the download
@@ -261,12 +283,25 @@ namespace FFT
                         Environment.Exit(0);
                     }
                 }
+                else
+                {
+                    // Alert user even when no update is found
+                    if (!systemCheck)
+                    {
+                        MessageBox.Show($"FastFileTransfer is up to date.", "Checking for updates", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                }
             }
             catch (Exception e)
             { 
                 MessageBox.Show("Unable to fetch updates at this time. Please try again later!", "Error Checking For Updates", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 Console.WriteLine(e.Message);
             }
+        }
+
+        private void frmMain_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            // TODO: IF ACTIVE CONNECTION, WARN USE IT WILL DISCONNECT SESSION IF THIS FORM IS CLOSED!
         }
     }
 }

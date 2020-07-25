@@ -28,13 +28,15 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.numPort = new System.Windows.Forms.NumericUpDown();
             this.label2 = new System.Windows.Forms.Label();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.cbLZMA = new System.Windows.Forms.RadioButton();
-            this.cbGZIP = new System.Windows.Forms.RadioButton();
             this.cbDisableCompression = new System.Windows.Forms.RadioButton();
+            this.cbGZIP = new System.Windows.Forms.RadioButton();
+            this.cbLZO = new System.Windows.Forms.RadioButton();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.cbBlowFish = new System.Windows.Forms.RadioButton();
             this.cbDisabledCrypto = new System.Windows.Forms.RadioButton();
@@ -50,7 +52,13 @@
             this.numBufferSize = new System.Windows.Forms.NumericUpDown();
             this.label1 = new System.Windows.Forms.Label();
             this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.cbLZO = new System.Windows.Forms.RadioButton();
+            this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.lstProtected = new System.Windows.Forms.ListBox();
+            this.mnuForbidden = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.addToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.removeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.cbDebug = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numPort)).BeginInit();
             this.groupBox5.SuspendLayout();
@@ -60,6 +68,9 @@
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numBufferSize)).BeginInit();
             this.tabPage2.SuspendLayout();
+            this.tabPage3.SuspendLayout();
+            this.groupBox3.SuspendLayout();
+            this.mnuForbidden.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -127,6 +138,17 @@
             this.cbLZMA.Text = "LZMA";
             this.cbLZMA.UseVisualStyleBackColor = true;
             // 
+            // cbDisableCompression
+            // 
+            this.cbDisableCompression.AutoSize = true;
+            this.cbDisableCompression.Location = new System.Drawing.Point(6, 22);
+            this.cbDisableCompression.Name = "cbDisableCompression";
+            this.cbDisableCompression.Size = new System.Drawing.Size(74, 20);
+            this.cbDisableCompression.TabIndex = 2;
+            this.cbDisableCompression.TabStop = true;
+            this.cbDisableCompression.Text = "Disabled";
+            this.cbDisableCompression.UseVisualStyleBackColor = true;
+            // 
             // cbGZIP
             // 
             this.cbGZIP.AutoSize = true;
@@ -139,16 +161,15 @@
             this.cbGZIP.Text = "GZIP";
             this.cbGZIP.UseVisualStyleBackColor = true;
             // 
-            // cbDisableCompression
+            // cbLZO
             // 
-            this.cbDisableCompression.AutoSize = true;
-            this.cbDisableCompression.Location = new System.Drawing.Point(6, 22);
-            this.cbDisableCompression.Name = "cbDisableCompression";
-            this.cbDisableCompression.Size = new System.Drawing.Size(74, 20);
-            this.cbDisableCompression.TabIndex = 2;
-            this.cbDisableCompression.TabStop = true;
-            this.cbDisableCompression.Text = "Disabled";
-            this.cbDisableCompression.UseVisualStyleBackColor = true;
+            this.cbLZO.AutoSize = true;
+            this.cbLZO.Location = new System.Drawing.Point(86, 22);
+            this.cbLZO.Name = "cbLZO";
+            this.cbLZO.Size = new System.Drawing.Size(48, 20);
+            this.cbLZO.TabIndex = 3;
+            this.cbLZO.Text = "LZO";
+            this.cbLZO.UseVisualStyleBackColor = true;
             // 
             // groupBox4
             // 
@@ -242,6 +263,7 @@
             // 
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage2);
+            this.tabControl1.Controls.Add(this.tabPage3);
             this.tabControl1.Location = new System.Drawing.Point(12, 12);
             this.tabControl1.Multiline = true;
             this.tabControl1.Name = "tabControl1";
@@ -251,6 +273,7 @@
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.cbDebug);
             this.tabPage1.Controls.Add(this.groupBox2);
             this.tabPage1.Controls.Add(this.groupBox1);
             this.tabPage1.Location = new System.Drawing.Point(4, 25);
@@ -325,15 +348,69 @@
             this.tabPage2.Text = "Data Configuration";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
-            // cbLZO
+            // tabPage3
             // 
-            this.cbLZO.AutoSize = true;
-            this.cbLZO.Location = new System.Drawing.Point(86, 22);
-            this.cbLZO.Name = "cbLZO";
-            this.cbLZO.Size = new System.Drawing.Size(48, 20);
-            this.cbLZO.TabIndex = 3;
-            this.cbLZO.Text = "LZO";
-            this.cbLZO.UseVisualStyleBackColor = true;
+            this.tabPage3.Controls.Add(this.groupBox3);
+            this.tabPage3.Location = new System.Drawing.Point(4, 25);
+            this.tabPage3.Name = "tabPage3";
+            this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage3.Size = new System.Drawing.Size(418, 332);
+            this.tabPage3.TabIndex = 2;
+            this.tabPage3.Text = "Security";
+            this.tabPage3.UseVisualStyleBackColor = true;
+            // 
+            // groupBox3
+            // 
+            this.groupBox3.Controls.Add(this.lstProtected);
+            this.groupBox3.Location = new System.Drawing.Point(54, 47);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(289, 220);
+            this.groupBox3.TabIndex = 0;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "Forbidden Directories";
+            // 
+            // lstProtected
+            // 
+            this.lstProtected.ContextMenuStrip = this.mnuForbidden;
+            this.lstProtected.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lstProtected.FormattingEnabled = true;
+            this.lstProtected.ItemHeight = 16;
+            this.lstProtected.Location = new System.Drawing.Point(3, 19);
+            this.lstProtected.Name = "lstProtected";
+            this.lstProtected.Size = new System.Drawing.Size(283, 198);
+            this.lstProtected.TabIndex = 0;
+            // 
+            // mnuForbidden
+            // 
+            this.mnuForbidden.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.addToolStripMenuItem,
+            this.removeToolStripMenuItem});
+            this.mnuForbidden.Name = "mnuForbidden";
+            this.mnuForbidden.Size = new System.Drawing.Size(118, 48);
+            // 
+            // addToolStripMenuItem
+            // 
+            this.addToolStripMenuItem.Name = "addToolStripMenuItem";
+            this.addToolStripMenuItem.Size = new System.Drawing.Size(117, 22);
+            this.addToolStripMenuItem.Text = "Add";
+            this.addToolStripMenuItem.Click += new System.EventHandler(this.addToolStripMenuItem_Click);
+            // 
+            // removeToolStripMenuItem
+            // 
+            this.removeToolStripMenuItem.Name = "removeToolStripMenuItem";
+            this.removeToolStripMenuItem.Size = new System.Drawing.Size(117, 22);
+            this.removeToolStripMenuItem.Text = "Remove";
+            this.removeToolStripMenuItem.Click += new System.EventHandler(this.removeToolStripMenuItem_Click);
+            // 
+            // cbDebug
+            // 
+            this.cbDebug.AutoSize = true;
+            this.cbDebug.Location = new System.Drawing.Point(266, 247);
+            this.cbDebug.Name = "cbDebug";
+            this.cbDebug.Size = new System.Drawing.Size(98, 20);
+            this.cbDebug.TabIndex = 15;
+            this.cbDebug.Text = "Debug Mode";
+            this.cbDebug.UseVisualStyleBackColor = true;
             // 
             // frmPreferences
             // 
@@ -361,10 +438,14 @@
             this.groupBox4.PerformLayout();
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
+            this.tabPage1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numBufferSize)).EndInit();
             this.tabPage2.ResumeLayout(false);
+            this.tabPage3.ResumeLayout(false);
+            this.groupBox3.ResumeLayout(false);
+            this.mnuForbidden.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -394,5 +475,12 @@
         private System.Windows.Forms.NumericUpDown numBufferSize;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.RadioButton cbLZO;
+        private System.Windows.Forms.TabPage tabPage3;
+        private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.ListBox lstProtected;
+        private System.Windows.Forms.ContextMenuStrip mnuForbidden;
+        private System.Windows.Forms.ToolStripMenuItem addToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem removeToolStripMenuItem;
+        private System.Windows.Forms.CheckBox cbDebug;
     }
 }
