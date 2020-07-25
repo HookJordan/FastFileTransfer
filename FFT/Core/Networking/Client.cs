@@ -66,12 +66,15 @@ namespace FFT.Core.Networking
             this.IP = ip;
             this.Port = port;
             this.BufferSize = bufferSize;
+        }
 
-            // Create new socket
+        public void Connect()
+        {
             try
             {
-                this.socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream,ProtocolType.Tcp);
-                this.socket.Connect(new IPEndPoint(IPAddress.Parse(ip), port));
+                // Create new socket
+                this.socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                this.socket.Connect(new IPEndPoint(ResolveDns(this.IP), this.Port));
 
                 if (this.socket.Connected)
                 {
@@ -80,21 +83,43 @@ namespace FFT.Core.Networking
 
                     // Confirm passwords using RC4
                     byte[] payload = Encoding.ASCII.GetBytes(this.encodedPassword);
-                    Encryption.RC4.Perform(ref payload, password);
+                    Encryption.RC4.Perform(ref payload, this.Password);
 
                     this.socket.Send(BitConverter.GetBytes(payload.Length));
                     this.socket.Send(payload);
 
-                    // Notify Ready
-                    this.ClientReady?.Invoke(this);
-
-                    this.socket.BeginReceive(new byte[] { 0 }, 0, 0, 0, BeginReceiveConfigurations, null);
+                    // Wait for server to confirm that the settings are match
+                    byte[] confirm = new byte[1];
+                    int rec = this.socket.Receive(confirm);
+                    if (rec == confirm.Length && confirm[0] == 1)
+                    {
+                        // Password is correct, start receiving data
+                        this.socket.BeginReceive(new byte[] { 0 }, 0, 0, 0, BeginReceiveConfigurations, null);
+                    }
+                    else
+                    {
+                        // Failed to sync with server
+                        this.ClientReady?.Invoke(this, false);
+                    }
                 }
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
-                throw new Exception($"Unable to connect to {IP} on port {port}");
+                throw new Exception($"Unable to connect to {IP} on port {Port}");
+            }
+        }
+
+        private IPAddress ResolveDns(string dns)
+        {
+            try
+            {
+                return IPAddress.Parse(dns);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return Dns.GetHostAddresses(dns)[0];
             }
         }
 
@@ -113,7 +138,7 @@ namespace FFT.Core.Networking
                 this.cryptoProvider = new CryptoProvider((CryptoAlgorithm)BitConverter.ToInt32(encryptionMode, 0), this.Password);
 
                 // Notify Ready
-                this.ClientReady?.Invoke(this);
+                this.ClientReady?.Invoke(this, true);
 
                 // Begin receiving real data now
                 this.socket.BeginReceive(new byte[] { 0 }, 0, 0, 0, Receive, null);
@@ -223,7 +248,7 @@ namespace FFT.Core.Networking
         public event PacketReceivedHandler PacketReceived;
         public delegate void DisconnectedHandler(Client client);
         public event DisconnectedHandler Disconnected;
-        public delegate void ClientReadyHandler(Client client);
+        public delegate void ClientReadyHandler(Client client, bool success);
         public event ClientReadyHandler ClientReady;
     }
 }

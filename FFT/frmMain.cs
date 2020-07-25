@@ -162,15 +162,17 @@ namespace FFT
         {
             try
             {
+                if (txtPassword.Text == string.Empty)
+                    throw new Exception("Password field can not be empty. Please enter a password to continue.");
+
                 this.btnConnect.Enabled = false;
                 this.client = new Client(this.txtIp.Text, (int)this.numPort.Value, this.txtPassword.Text, configuration.BufferSize);
 
-                if (this.client.Connected)
-                {
-                    var fb = new frmFileBrowser(this.client);
-                    fb.FormClosing += Fb_FormClosing;
-                    fb.Show();
-                }
+                // Setup callback for when connection has been established
+                this.client.ClientReady += Client_ClientReady;
+
+                // Begin connection / pairing
+                this.client.Connect();
             }
             catch (Exception err)
             {
@@ -178,6 +180,25 @@ namespace FFT
                 MessageBox.Show(err.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        private void Client_ClientReady(Client client, bool success)
+        {
+            Invoke((MethodInvoker)delegate
+            {
+                if (success)
+                {
+                    var fb = new frmFileBrowser(client);
+                    fb.FormClosing += Fb_FormClosing;
+                    fb.Show();
+                }
+                else
+                {
+                    MessageBox.Show("Unable to connect to server. Please verify your configuration and try again.", "Unable to connect", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    btnConnect.Enabled = true;
+                }
+            });
+        }
+
         private void Fb_FormClosing(object sender, FormClosingEventArgs e)
         {
             btnConnect.Enabled = true;
@@ -276,6 +297,11 @@ namespace FFT
                 MessageBox.Show("Unable to fetch updates at this time. Please try again later!", "Error Checking For Updates", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 Console.WriteLine(e.Message);
             }
+        }
+
+        private void frmMain_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            // TODO: IF ACTIVE CONNECTION, WARN USE IT WILL DISCONNECT SESSION IF THIS FORM IS CLOSED!
         }
     }
 }

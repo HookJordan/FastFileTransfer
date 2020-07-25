@@ -115,10 +115,12 @@ namespace FFT.Core.Networking
                     
                     if (Encoding.ASCII.GetString(data) == Encryption.SHA.Encode(this.Password))
                     {
-                        this.ConnectionRequest(this, sock);   
+                        sock.Send(new byte[] { 1 });
+                        this.ConnectionRequest(this, sock);
                     } 
                     else
                     {
+                        sock.Send(new byte[] { 0 });
                         sock.Close();
                     }
                 }
