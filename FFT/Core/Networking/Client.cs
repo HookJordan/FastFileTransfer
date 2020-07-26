@@ -78,10 +78,10 @@ namespace FFT.Core.Networking
 
                 if (this.socket.Connected)
                 {
-                    // TODO: Instead of rc4 encoding the password... hash the password and compare hashes 
-                    // Use unhashed version of password for actual encryption
-
-                    // Confirm passwords using RC4
+                    // Password is sent as as sha hash for verification
+                    // Hash is encrypted with RC4 and the set password
+                    // The raw password that is actually used to encrypt the data
+                    // is never sent over the network
                     byte[] payload = Encoding.ASCII.GetBytes(this.encodedPassword);
                     Encryption.RC4.Perform(ref payload, this.Password);
 

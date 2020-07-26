@@ -95,7 +95,7 @@ namespace FFT.Core.Networking
 
                 if (rec == 0)
                 {
-                    sock.Dispose();
+                    sock.Close();
                 } 
                 else
                 {
@@ -104,13 +104,15 @@ namespace FFT.Core.Networking
                     // Password validation should not be bigger then 4096 bytes
                     if (size > 1024)
                     {
-                        sock.Dispose();
+                        sock.Close();
                     }
 
                     byte[] data = new byte[size];
                     rec = sock.Receive(data);
 
-                    // Decrypt the packet using the password
+                    // Password is received in RC4(SHA(password), password) format
+                    // We need to decrypt the password and verify the sha hash matches 
+                    // the hash of the password the server is using
                     Encryption.RC4.Perform(ref data, this.Password);
                     
                     if (Encoding.ASCII.GetString(data) == Encryption.SHA.Encode(this.Password))

@@ -15,6 +15,7 @@
         DirectoryDelete,
         DirectoryCreate,
         DirectoryMove,
+        DirectoryCompress,
         FileDelete,
         FileMove,
         FileBrowserException,

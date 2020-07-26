@@ -47,6 +47,7 @@
     <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -101,6 +102,12 @@
     </Compile>
     <Compile Include="Core\UI\IconReader.cs" />
     <Compile Include="Core\UI\Util.cs" />
+    <Compile Include="dlgLoad.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="dlgLoad.Designer.cs">
+      <DependentUpon>dlgLoad.cs</DependentUpon>
+    </Compile>
     <Compile Include="frmFileBrowser.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -127,6 +134,9 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="dlgLoad.resx">
+      <DependentUpon>dlgLoad.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="frmFileBrowser.resx">
       <DependentUpon>frmFileBrowser.cs</DependentUpon>
     </EmbeddedResource>

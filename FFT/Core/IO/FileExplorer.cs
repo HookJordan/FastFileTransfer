@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 
 namespace FFT.Core.IO
@@ -55,6 +56,10 @@ namespace FFT.Core.IO
                     case PacketHeader.DirectoryMove:
                         IsProtected(packet.ToString()); // Permissions Check (Protected Directories)
                         MoveDirectory(packet);
+                        break;
+                    case PacketHeader.DirectoryCompress:
+                        IsProtected(packet.ToString());
+                        CompressDirectory(packet.ToString());
                         break;
                     case PacketHeader.FileMove:
                         IsProtected(packet.ToString()); // Permissions Check (Protected Directories)
@@ -134,6 +139,26 @@ namespace FFT.Core.IO
             {
                 Log?.Info($"Deleted Directory: {path}");
                 Directory.Delete(path, true);
+            }
+        }
+
+        private static void CompressDirectory(string directory)
+        {
+            try
+            {
+                Log?.Info($"Compressing Directory: {directory} -> {directory}.zip");
+                ZipFile.CreateFromDirectory(directory, $"{directory}.zip", CompressionLevel.Fastest, true);
+            }
+            catch (Exception ex)
+            {
+                Debug(ex.Message);
+
+                // Remove the failed zip archive 
+                if (File.Exists($"{directory}.zip"))
+                    DeleteFile($"{directory}.zip");
+
+                // Pass exception back to server
+                throw ex;
             }
         }
 
