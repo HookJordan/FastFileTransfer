@@ -1,10 +1,17 @@
-﻿using System.Text;
+﻿using System;
+using System.Text;
 
 namespace FFT.Core.Encryption
 {
     class RC4
     {
-
+        public static byte[] PerformByCopy(byte[] bytes, string key)
+        {
+            byte[] dec = new byte[bytes.Length];
+            bytes.CopyTo(dec, 0);
+            Perform(ref dec, key);
+            return dec;
+        }
         public static void Perform(ref byte[] bytes, string key)
         {
             Perform(ref bytes, Encoding.ASCII.GetBytes(SHA.Encode(key)));

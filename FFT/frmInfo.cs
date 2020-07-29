@@ -28,6 +28,7 @@ namespace FFT
 
         private void frmInfo_Load(object sender, EventArgs e)
         {
+            this.Icon = Icon.ExtractAssociatedIcon(Application.ExecutablePath);
             this.FormClosing += FrmInfo_FormClosing;
             this.rtxtLog.TextChanged += RtxtLog_TextChanged;
         }

@@ -17,6 +17,7 @@ namespace FFT
         private Client client;
         private Client incomingClient;
         private Configuration configuration;
+        private bool closeToTaskbar = true;
 
         public frmMain()
         {
@@ -25,7 +26,10 @@ namespace FFT
 
         private void frmMain_Load(object sender, EventArgs e)
         {
+            this.Icon = Icon.ExtractAssociatedIcon(Application.ExecutablePath);
+
             this.Text = String.Format("FFT - FastFileTransfer {0:0}", Program.BUILD_VERSION);
+            this.icnMain.Text = this.Text;
 
             // Remove ugly buttons
             this.numPort.Controls[0].Visible = false;
@@ -48,6 +52,12 @@ namespace FFT
         {
             this.server = new Server(Convert.ToInt32(this.txtIncomePort.Text), this.txtIncomePass.Text);
 
+            // If unattended access is configued, add password to the server
+            if (configuration.UnattendedAccess)
+            {
+                this.server.SetPersonalPassword(configuration.PersonalPassword);
+            }
+
             try
             {
                 this.server.ConnectionRequest += Server_ConnectionRequest;
@@ -66,12 +76,12 @@ namespace FFT
 
         }
 
-        private void Server_ConnectionRequest(Server server, System.Net.Sockets.Socket socket)
+        private void Server_ConnectionRequest(Server server, System.Net.Sockets.Socket socket, string password)
         {
             if (this.incomingClient == null || !this.incomingClient.Connected)
             {
                 this.server.AcceptingConnections = false;
-                incomingClient = new Client(socket, this.txtIncomePass.Text, new CompressionProvider(configuration.compressionAlgorithm), new CryptoProvider(configuration.cryptoAlgorithm, server.Password), configuration.BufferSize);
+                incomingClient = new Client(socket, password, new CompressionProvider(configuration.compressionAlgorithm), new CryptoProvider(configuration.cryptoAlgorithm, password), configuration.BufferSize);
                 incomingClient.PacketReceived += Client_PacketReceived;
                 incomingClient.Disconnected += IncomingClient_Disconnected;
 
@@ -154,7 +164,8 @@ namespace FFT
 
         private void quitToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            this.server.Stop();
+            closeToTaskbar = false;
+            this.server?.Stop();
             Application.Exit(new CancelEventArgs(true));
         }
 
@@ -231,9 +242,9 @@ namespace FFT
 
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (MessageBox.Show("This action will launch a new window you web browser. Are you sure you wish to continue?", "About", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            if (MessageBox.Show("This action will launch a new window in your web browser. Are you sure you wish to continue?", "About", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
-                System.Diagnostics.Process.Start("https://jordanhook.com/index.php?&controller=home&view=projectsItem&projectId=8");
+                System.Diagnostics.Process.Start("https://jordanhook.com/index.php?&controller=home&view=appDetails&appId=15");
             }
         }
 
@@ -253,6 +264,17 @@ namespace FFT
                     // Update Display of other settings
                     this.UpdateStatusStrip();
                     FileExplorer.Config = configuration;
+
+                    if (configuration.UnattendedAccess)
+                    {
+                        server.SetPersonalPassword(configuration.PersonalPassword);
+                    }
+                    else
+                    {
+                        server.SetPersonalPassword(null);
+                    }
+
+                    // TODO: Check add to startup
                 }
             }
         }
@@ -275,12 +297,12 @@ namespace FFT
                 {
                     if (MessageBox.Show($"A newer version of FastFileTransfer has been found. Would you like to download version: {update.version}?", "Update Found", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                     {
-                        // TODO: This could be improved in the future to actually replace itself with the updated version
-                        // Open the users browser to complete the download
-                        System.Diagnostics.Process.Start("https://jordanhook.com/" + update.package);
-
-                        // Close application
-                        Environment.Exit(0);
+                        // Create new instance of the downloader
+                        using (UpdateDownloader ud = new UpdateDownloader(update.version, Program.BUILD_VERSION, "15", $"{Application.StartupPath}\\{update.package.Replace("apps/", "")}"))
+                        {
+                            // Downloader will handle rest of update from here
+                            ud.Download();
+                        }
                     }
                 }
                 else
@@ -301,7 +323,40 @@ namespace FFT
 
         private void frmMain_FormClosing(object sender, FormClosingEventArgs e)
         {
-            // TODO: IF ACTIVE CONNECTION, WARN USE IT WILL DISCONNECT SESSION IF THIS FORM IS CLOSED!
+            // Clsose to notification bar
+            this.Hide();
+
+            // Hide to task bar
+            if (closeToTaskbar)
+            {
+                icnMain.ShowBalloonTip(5000, "FastFileTransfer", "FastFileTransfer is still running in the background.", ToolTipIcon.Info);
+                e.Cancel = true;
+            }
+        }
+
+        private void checkForUpdatesToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            checkForUpdatesToolStripMenuItem.PerformClick();
+        }
+
+        private void preferencesToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            preferencesToolStripMenuItem.PerformClick();
+        }
+
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            quitToolStripMenuItem.PerformClick();
+        }
+
+        private void openToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.Show();
+        }
+
+        private void icnMain_DoubleClick(object sender, EventArgs e)
+        {
+            this.Show();
         }
     }
 }

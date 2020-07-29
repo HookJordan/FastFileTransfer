@@ -4,11 +4,14 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.CompilerServices;
+using System.Text;
 
 namespace FFT.Core
 {
     public class Configuration
     {
+        private static byte[] KEY = Encoding.ASCII.GetBytes("F@$tF1l3Tr@n$f3rK3y$$1024256%");
+
         public int Port;
         public int BufferSize;
 
@@ -20,6 +23,11 @@ namespace FFT.Core
 
         // Added in 1.2.0
         public bool DebugMode { get; set; }
+
+        // Added in 1.3.0 
+        public bool UnattendedAccess { get; set; }
+        public bool StartWithWindows { get; set; }
+        public string PersonalPassword { get; set; }
         private Configuration()
         {
             // Defaults
@@ -35,6 +43,9 @@ namespace FFT.Core
             });
 
             this.DebugMode = false;
+            this.StartWithWindows = false;
+            this.UnattendedAccess = false;
+            this.PersonalPassword = string.Empty;
         }
 
         public void Save(string path)
@@ -55,6 +66,15 @@ namespace FFT.Core
                     }
 
                     bw.Write(DebugMode);
+
+                    bw.Write(UnattendedAccess);
+                    bw.Write(StartWithWindows);
+
+                    // Encrypt personal password before storage
+                    byte[] personalPass = Encoding.ASCII.GetBytes(PersonalPassword);
+                    RC4.Perform(ref personalPass, KEY);
+                    bw.Write(personalPass.Length);
+                    bw.Write(personalPass);
                 }
             }
         }
@@ -92,6 +112,14 @@ namespace FFT.Core
 
                             config.DebugMode = br.ReadBoolean();
 
+                            config.UnattendedAccess = br.ReadBoolean();
+                            config.StartWithWindows = br.ReadBoolean();
+
+                            // Decrypt personal password
+                            int passLen = br.ReadInt32();
+                            byte[] rawPass = br.ReadBytes(passLen);
+                            RC4.Perform(ref rawPass, KEY);
+                            config.PersonalPassword = Encoding.ASCII.GetString(rawPass);
                         }
                         catch (Exception e)
                         {

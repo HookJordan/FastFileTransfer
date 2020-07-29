@@ -10,11 +10,12 @@ namespace FFT.Core.Networking
         public bool Running { get; private set; }
         public int Port { get; private set; }
         public string Password { get; private set; }
+        public string PersonalPassword { get; private set; }
         private Socket listener;
 
         public bool AcceptingConnections { get; set; }
 
-        public Server(int port, String password)
+        public Server(int port, string password)
         {
             this.Port = port;
             this.Password = password;
@@ -113,17 +114,35 @@ namespace FFT.Core.Networking
                     // Password is received in RC4(SHA(password), password) format
                     // We need to decrypt the password and verify the sha hash matches 
                     // the hash of the password the server is using
-                    Encryption.RC4.Perform(ref data, this.Password);
-                    
-                    if (Encoding.ASCII.GetString(data) == Encryption.SHA.Encode(this.Password))
+                    byte[] dec = Encryption.RC4.PerformByCopy(data, this.Password);
+
+                    if (Encoding.ASCII.GetString(dec) == Encryption.SHA.Encode(this.Password))
                     {
                         sock.Send(new byte[] { 1 });
-                        this.ConnectionRequest(this, sock);
+                        this.ConnectionRequest(this, sock, this.Password);
                     } 
                     else
                     {
-                        sock.Send(new byte[] { 0 });
-                        sock.Close();
+                        // Try unattended access password if set
+                        if (this.PersonalPassword != null)
+                        {
+                            dec = Encryption.RC4.PerformByCopy(data, this.PersonalPassword);
+                            if (Encoding.ASCII.GetString(dec) == Encryption.SHA.Encode(this.PersonalPassword))
+                            {
+                                sock.Send(new byte[] { 1 });
+                                this.ConnectionRequest(this, sock, this.PersonalPassword);
+                            }
+                            else
+                            {
+                                sock.Send(new byte[] { 0 });
+                                sock.Close();
+                            }
+                        }
+                        else 
+                        {
+                            sock.Send(new byte[] { 0 });
+                            sock.Close();
+                        }
                     }
                 }
 
@@ -148,6 +167,14 @@ namespace FFT.Core.Networking
             }
         }
 
+        public void SetPersonalPassword(string password)
+        {
+            lock (this)
+            {
+                this.PersonalPassword = password;
+            }
+        }
+
         public void SetPort(int port)
         {
             lock(this)
@@ -158,7 +185,7 @@ namespace FFT.Core.Networking
             }
         }
 
-        public delegate void ConnectionRequestHandler(Server server, Socket socket);
+        public delegate void ConnectionRequestHandler(Server server, Socket socket, string password);
         public event ConnectionRequestHandler ConnectionRequest;
     }
 }

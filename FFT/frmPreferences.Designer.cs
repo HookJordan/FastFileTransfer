@@ -47,18 +47,23 @@
             this.btnConfirm = new System.Windows.Forms.Button();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.cbDebug = new System.Windows.Forms.CheckBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.label3 = new System.Windows.Forms.Label();
             this.numBufferSize = new System.Windows.Forms.NumericUpDown();
             this.label1 = new System.Windows.Forms.Label();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.groupBox6 = new System.Windows.Forms.GroupBox();
+            this.cbStartup = new System.Windows.Forms.CheckBox();
+            this.txtPersonalPass = new System.Windows.Forms.TextBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.cbUnattended = new System.Windows.Forms.CheckBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.lstProtected = new System.Windows.Forms.ListBox();
             this.mnuForbidden = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.addToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.removeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.cbDebug = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numPort)).BeginInit();
             this.groupBox5.SuspendLayout();
@@ -69,6 +74,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.numBufferSize)).BeginInit();
             this.tabPage2.SuspendLayout();
             this.tabPage3.SuspendLayout();
+            this.groupBox6.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.mnuForbidden.SuspendLayout();
             this.SuspendLayout();
@@ -284,6 +290,16 @@
             this.tabPage1.Text = "Network Configuration";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
+            // cbDebug
+            // 
+            this.cbDebug.AutoSize = true;
+            this.cbDebug.Location = new System.Drawing.Point(266, 247);
+            this.cbDebug.Name = "cbDebug";
+            this.cbDebug.Size = new System.Drawing.Size(98, 20);
+            this.cbDebug.TabIndex = 15;
+            this.cbDebug.Text = "Debug Mode";
+            this.cbDebug.UseVisualStyleBackColor = true;
+            // 
             // groupBox2
             // 
             this.groupBox2.Controls.Add(this.label3);
@@ -350,6 +366,7 @@
             // 
             // tabPage3
             // 
+            this.tabPage3.Controls.Add(this.groupBox6);
             this.tabPage3.Controls.Add(this.groupBox3);
             this.tabPage3.Location = new System.Drawing.Point(4, 25);
             this.tabPage3.Name = "tabPage3";
@@ -359,15 +376,69 @@
             this.tabPage3.Text = "Security";
             this.tabPage3.UseVisualStyleBackColor = true;
             // 
+            // groupBox6
+            // 
+            this.groupBox6.Controls.Add(this.cbStartup);
+            this.groupBox6.Controls.Add(this.txtPersonalPass);
+            this.groupBox6.Controls.Add(this.label4);
+            this.groupBox6.Controls.Add(this.cbUnattended);
+            this.groupBox6.Location = new System.Drawing.Point(54, 47);
+            this.groupBox6.Name = "groupBox6";
+            this.groupBox6.Size = new System.Drawing.Size(289, 91);
+            this.groupBox6.TabIndex = 1;
+            this.groupBox6.TabStop = false;
+            this.groupBox6.Text = "Unattended Access";
+            // 
+            // cbStartup
+            // 
+            this.cbStartup.AutoSize = true;
+            this.cbStartup.Enabled = false;
+            this.cbStartup.Location = new System.Drawing.Point(9, 65);
+            this.cbStartup.Name = "cbStartup";
+            this.cbStartup.Size = new System.Drawing.Size(137, 20);
+            this.cbStartup.TabIndex = 3;
+            this.cbStartup.Text = "Start with windows";
+            this.cbStartup.UseVisualStyleBackColor = true;
+            // 
+            // txtPersonalPass
+            // 
+            this.txtPersonalPass.Enabled = false;
+            this.txtPersonalPass.Location = new System.Drawing.Point(9, 38);
+            this.txtPersonalPass.Name = "txtPersonalPass";
+            this.txtPersonalPass.PasswordChar = '*';
+            this.txtPersonalPass.Size = new System.Drawing.Size(274, 23);
+            this.txtPersonalPass.TabIndex = 2;
+            this.txtPersonalPass.Enter += new System.EventHandler(this.txtPersonalPass_Enter);
+            this.txtPersonalPass.Leave += new System.EventHandler(this.txtPersonalPass_Leave);
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(6, 19);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(68, 16);
+            this.label4.TabIndex = 1;
+            this.label4.Text = "Password:";
+            // 
+            // cbUnattended
+            // 
+            this.cbUnattended.AutoSize = true;
+            this.cbUnattended.Location = new System.Drawing.Point(218, 67);
+            this.cbUnattended.Name = "cbUnattended";
+            this.cbUnattended.Size = new System.Drawing.Size(65, 20);
+            this.cbUnattended.TabIndex = 0;
+            this.cbUnattended.Text = "Enable";
+            this.cbUnattended.UseVisualStyleBackColor = true;
+            // 
             // groupBox3
             // 
             this.groupBox3.Controls.Add(this.lstProtected);
-            this.groupBox3.Location = new System.Drawing.Point(54, 47);
+            this.groupBox3.Location = new System.Drawing.Point(54, 144);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(289, 220);
+            this.groupBox3.Size = new System.Drawing.Size(289, 123);
             this.groupBox3.TabIndex = 0;
             this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "Forbidden Directories";
+            this.groupBox3.Text = "Protected Directories";
             // 
             // lstProtected
             // 
@@ -377,7 +448,7 @@
             this.lstProtected.ItemHeight = 16;
             this.lstProtected.Location = new System.Drawing.Point(3, 19);
             this.lstProtected.Name = "lstProtected";
-            this.lstProtected.Size = new System.Drawing.Size(283, 198);
+            this.lstProtected.Size = new System.Drawing.Size(283, 101);
             this.lstProtected.TabIndex = 0;
             // 
             // mnuForbidden
@@ -402,16 +473,6 @@
             this.removeToolStripMenuItem.Text = "Remove";
             this.removeToolStripMenuItem.Click += new System.EventHandler(this.removeToolStripMenuItem_Click);
             // 
-            // cbDebug
-            // 
-            this.cbDebug.AutoSize = true;
-            this.cbDebug.Location = new System.Drawing.Point(266, 247);
-            this.cbDebug.Name = "cbDebug";
-            this.cbDebug.Size = new System.Drawing.Size(98, 20);
-            this.cbDebug.TabIndex = 15;
-            this.cbDebug.Text = "Debug Mode";
-            this.cbDebug.UseVisualStyleBackColor = true;
-            // 
             // frmPreferences
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 16F);
@@ -426,7 +487,7 @@
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "frmPreferences";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "frmPreferences";
             this.Load += new System.EventHandler(this.frmPreferences_Load);
             this.groupBox1.ResumeLayout(false);
@@ -444,6 +505,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.numBufferSize)).EndInit();
             this.tabPage2.ResumeLayout(false);
             this.tabPage3.ResumeLayout(false);
+            this.groupBox6.ResumeLayout(false);
+            this.groupBox6.PerformLayout();
             this.groupBox3.ResumeLayout(false);
             this.mnuForbidden.ResumeLayout(false);
             this.ResumeLayout(false);
@@ -482,5 +545,10 @@
         private System.Windows.Forms.ToolStripMenuItem addToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem removeToolStripMenuItem;
         private System.Windows.Forms.CheckBox cbDebug;
+        private System.Windows.Forms.GroupBox groupBox6;
+        private System.Windows.Forms.TextBox txtPersonalPass;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.CheckBox cbUnattended;
+        private System.Windows.Forms.CheckBox cbStartup;
     }
 }

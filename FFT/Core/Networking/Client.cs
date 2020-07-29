@@ -83,7 +83,7 @@ namespace FFT.Core.Networking
                     // The raw password that is actually used to encrypt the data
                     // is never sent over the network
                     byte[] payload = Encoding.ASCII.GetBytes(this.encodedPassword);
-                    Encryption.RC4.Perform(ref payload, this.Password);
+                    RC4.Perform(ref payload, this.Password);
 
                     this.socket.Send(BitConverter.GetBytes(payload.Length));
                     this.socket.Send(payload);
