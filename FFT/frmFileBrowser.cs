@@ -21,6 +21,7 @@ namespace FFT
         private bool drives = true;
         ListViewItem lastItem = null; 
         public Client client { get; set; }
+        private dlgLoad dlgLoader { get; set; }
         public frmFileBrowser(Client client)
         {
             this.client = client;           
@@ -90,6 +91,7 @@ namespace FFT
 
         private void frmFileBrowser_Load(object sender, EventArgs e)
         {
+            this.Icon = Icon.ExtractAssociatedIcon(Application.ExecutablePath);
             this.Text = $"File Browser - {client.IP}";
 
             // Set Listview to drives view
@@ -113,14 +115,19 @@ namespace FFT
 
         private void Client_Disconnected(Client client)
         {
-            Invoke((MethodInvoker)delegate {
-                if (!this.IsDisposed)
+            try
+            {
+                Invoke((MethodInvoker)delegate
                 {
                     lstFiles.Enabled = false;
                     MessageBox.Show("The remote sessions has ended. Please reconnect to continue.", "Remote Session Closed", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     this?.Close();
-                }
-            });
+                });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
         }
 
         private void Client_PacketReceived(Client client, byte[] payload)
@@ -234,9 +241,16 @@ namespace FFT
                             case PacketHeader.DirectoryDelete:
                             case PacketHeader.DirectoryCreate:
                             case PacketHeader.DirectoryMove:
+                            case PacketHeader.DirectoryCompress:
+                            case PacketHeader.FileCompress:
                             case PacketHeader.FileDelete:
                             case PacketHeader.FileMove:
                                 client.Send(Packet.Create(PacketHeader.GetDirectory, currentPath));
+                                if (dlgLoader != null)
+                                {
+                                    dlgLoader.Dispose();
+                                    dlgLoader = null;
+                                }
                                 break;
                             case PacketHeader.FileBrowserException:
                                 if (p.ToString().StartsWith("Access denied!"))
@@ -245,6 +259,11 @@ namespace FFT
                                 }
                                 MessageBox.Show(p.ToString(), "An error occured", MessageBoxButtons.OK, MessageBoxIcon.Error);
                                 lstFiles.Enabled = true;
+                                if (dlgLoader != null)
+                                {
+                                    dlgLoader.Hide();
+                                    dlgLoader = null;
+                                }
                                 break;
                             case PacketHeader.CancelTransfer:
                                 CancelTransferItem(transfers.CancelTransfer(p.ToString()));
@@ -367,6 +386,8 @@ namespace FFT
                 deleteToolStripMenuItem1.Enabled = false;
                 downloadToolStripMenuItem.Enabled = false;
                 uploadToolStripMenuItem.Enabled = true;
+                compressZIPToolStripMenuItem.Enabled = false;
+                compressZIPToolStripMenuItem1.Enabled = false;
             }
             else
             {
@@ -380,6 +401,8 @@ namespace FFT
                     deleteToolStripMenuItem1.Enabled = false;
                     downloadToolStripMenuItem.Enabled = false;
                     uploadToolStripMenuItem.Enabled = false;
+                    compressZIPToolStripMenuItem.Enabled = true;
+                    compressZIPToolStripMenuItem1.Enabled = false;
                 } else
                 {
                     moveToolStripMenuItem1.Enabled = true;
@@ -388,6 +411,8 @@ namespace FFT
                     deleteToolStripMenuItem.Enabled = false;
                     uploadToolStripMenuItem.Enabled = true;
                     downloadToolStripMenuItem.Enabled = true;
+                    compressZIPToolStripMenuItem.Enabled = false;
+                    compressZIPToolStripMenuItem1.Enabled = true;
                 }
             }
         }
@@ -672,6 +697,34 @@ namespace FFT
             ProgressBar progressBar = lstTransfers.Controls.OfType<ProgressBar>().FirstOrDefault(i => (string)i.Tag == (string)item.Tag);
             lstTransfers.Items.Remove(item);
             lstTransfers.Controls.Remove(progressBar);
+        }
+
+        private void compressZIPToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var item = lstFiles.SelectedItems[0];
+            lstFiles.Enabled = false;
+
+            if (dlgLoader == null)
+            {
+                dlgLoader = new dlgLoad("Compressing Directory", $"Creating ZIP archive from:\n{item.SubItems[1].Text}\n\nDestination:\n{item.SubItems[1].Text}.zip");
+                dlgLoader.Show();
+            }
+
+            this.client.Send(Packet.Create(PacketHeader.DirectoryCompress, item.SubItems[1].Text));
+        }
+
+        private void compressZIPToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            var item = lstFiles.SelectedItems[0];
+            lstFiles.Enabled = false;
+
+            if (dlgLoader == null)
+            {
+                dlgLoader = new dlgLoad("Compressing File", $"Creating ZIP archive from:\n{item.SubItems[1].Text}\n\nDestination:\n{item.SubItems[1].Text}.zip");
+                dlgLoader.Show();
+            }
+
+            this.client.Send(Packet.Create(PacketHeader.FileCompress, item.SubItems[1].Text));
         }
     }
 }

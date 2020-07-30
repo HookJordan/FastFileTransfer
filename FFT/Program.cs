@@ -5,7 +5,7 @@ namespace FFT
 {
     static class Program
     {
-        public static string BUILD_VERSION = "1.2.0";
+        public static string BUILD_VERSION = "1.3.0";
 
         /// <summary>
         /// The main entry point for the application.

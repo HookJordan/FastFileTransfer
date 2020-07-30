@@ -12,6 +12,23 @@
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <AutorunEnabled>true</AutorunEnabled>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.3.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <PublishWizardCompleted>true</PublishWizardCompleted>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -43,10 +60,24 @@
   <PropertyGroup>
     <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>FFT.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestCertificateThumbprint>69FFF9C771C693B79F09CC7D5989F60FE49C7505</ManifestCertificateThumbprint>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestKeyFile>FFT_TemporaryKey.pfx</ManifestKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignManifests>false</SignManifests>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -86,6 +117,7 @@
     <Compile Include="Core\Encryption\SHA.cs" />
     <Compile Include="Core\Encryption\RC4.cs" />
     <Compile Include="Core\Encryption\XOR.cs" />
+    <Compile Include="Core\Installation\Startup.cs" />
     <Compile Include="Core\IO\FileExplorer.cs" />
     <Compile Include="Core\IO\FileTransfer.cs" />
     <Compile Include="Core\IO\Logger.cs" />
@@ -94,6 +126,7 @@
     <Compile Include="Core\Networking\Client.cs" />
     <Compile Include="Core\Networking\PacketHeader.cs" />
     <Compile Include="Core\Networking\Server.cs" />
+    <Compile Include="Core\Networking\UpdateDownloader.cs" />
     <Compile Include="Core\Networking\Updater.cs" />
     <Compile Include="Core\UI\FancyListViewSort.cs" />
     <Compile Include="Core\UI\FancyListView.cs">
@@ -101,6 +134,12 @@
     </Compile>
     <Compile Include="Core\UI\IconReader.cs" />
     <Compile Include="Core\UI\Util.cs" />
+    <Compile Include="dlgLoad.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="dlgLoad.Designer.cs">
+      <DependentUpon>dlgLoad.cs</DependentUpon>
+    </Compile>
     <Compile Include="frmFileBrowser.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -127,6 +166,9 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="dlgLoad.resx">
+      <DependentUpon>dlgLoad.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="frmFileBrowser.resx">
       <DependentUpon>frmFileBrowser.cs</DependentUpon>
     </EmbeddedResource>
@@ -161,6 +203,21 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="FFT.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.7.2">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.7.2 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

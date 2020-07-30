@@ -26,6 +26,5 @@ namespace FFT.Core.Networking
             public string version { get; set; }
             public string package { get; set; }
         }
-
     }
 }
